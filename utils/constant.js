@@ -1,1 +1,7 @@
-module.exports = Object.freeze({});
+module.exports = Object.freeze({
+    OTP_SECRET_COOKIE_MAX_AGE: 30 * 1000,
+	JWT_COOKIE_MAX_AGE: 24 * 60 * 60 * 1000,
+	RESULTS_PER_PAGE: 5,
+	SALT_ROUNDS: 14,
+	FILE_MAX_SIZE: 2 * 1000 * 1000,
+});

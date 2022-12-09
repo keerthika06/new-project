@@ -6,6 +6,8 @@ const constants = require("../utils/constant");
 const { internalServerError } = require("../utils/commonErrors");
 const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
+const { sendEmail } = require("../utils/sendEmail");
+
 
 const register = async (req, res) => {
   if (!req.body)
@@ -52,7 +54,7 @@ const register = async (req, res) => {
         const accessToken = jwt.sign(
           { userId: result._id, email: result.email },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIN: "1h" }
+          { expiresIn: "1h" }
         );
         const refreshToken = jwt.sign(
           { userId: result._id, email: result.email },
@@ -81,7 +83,20 @@ const register = async (req, res) => {
     }
   });
 };
+const login = async (req,res) => {
+  try {
+    
+
+  }
+  catch(error) {
+    console.log("error from register", error);
+    internalServerError(res, error);
+  }
+
+
+}
 
 module.exports = {
   register,
+  login
 };
