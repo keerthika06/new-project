@@ -14,6 +14,14 @@ const addPlace = async (req, res) => {
       phone,
       latitude,
       longitude,
+      acceptsCreditCard,
+      delivery,
+      dogFriendly,
+      familyFriendly,
+      inWalkingDistance,
+      outdoorSeating,
+      parking,
+      wifi,
     } = req.body;
     const { email, userId } = req.users;
     const placePic = req.file.path;
@@ -26,7 +34,7 @@ const addPlace = async (req, res) => {
       }
     );
     //const picture = cloudinaryResult.url;
-    console.log(picture);
+    // console.log(picture);
     const place = new Place({
       placePic: {
         public_id: cloudinaryResult.public_id,
@@ -41,6 +49,14 @@ const addPlace = async (req, res) => {
       latitude,
       longitude,
       email,
+      acceptsCreditCard,
+      delivery,
+      dogFriendly,
+      familyFriendly,
+      inWalkingDistance,
+      outdoorSeating,
+      parking,
+      wifi,
     });
     const result = await place.save();
     if (result)
