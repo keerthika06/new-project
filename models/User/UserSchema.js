@@ -17,9 +17,13 @@ const UserSchema = new mongoose.Schema({
   },
   fav: [
     {
-      placeId: { type: String },
+      placeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "placeModel",
+      },
     },
   ],
+  feedback: [{ type: String }],
   // friends: [{ type : ObjectId, ref: 'User' }],
 });
 

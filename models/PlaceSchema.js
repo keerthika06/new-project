@@ -7,18 +7,16 @@ const PlaceSchema = new mongoose.Schema({
   },
   placeName: { type: String },
   placePic: {
-    profilePic: {
-      public_id: {
-        type: String,
-        // required: true,
-      },
-      url: {
-        type: String,
-        //required: true,
-      },
+    public_id: {
+      type: String,
+      // required: true,
+    },
+    url: {
+      type: String,
+      //required: true,
     },
   },
-  rating: { type: String },
+  rating: { type: Number },
   description: { type: String },
   address: { type: String },
   stars: {
@@ -29,7 +27,25 @@ const PlaceSchema = new mongoose.Schema({
   phone: { type: String },
   photos: [
     {
-      profilePic: {
+      public_id: {
+        type: String,
+        // required: true,
+      },
+      url: {
+        type: String,
+        //required: true,
+      },
+    },
+  ],
+  review: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserModel",
+      },
+      reviewtext: { type: String, required: true },
+      date: { type: String, required: true },
+      reviewPic: {
         public_id: {
           type: String,
           // required: true,
@@ -41,75 +57,33 @@ const PlaceSchema = new mongoose.Schema({
       },
     },
   ],
-  review: [
-    {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "UserModel",
-      },
-      review: { type: String, required: true },
-      date: { type: String, required: true },
-    },
-  ],
-  distance: {
-    latitude: { type: String },
-    longitude: { type: String },
-  },
+
+  latitude: { type: String },
+  longitude: { type: String },
+
   acceptsCreditCard: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   delivery: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   dogFriendly: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   familyFriendly: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   inWalkingDistance: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   outdoorSeating: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   parking: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
   wifi: {
-    status: { type: Boolean },
-    placeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PlaceModel",
-    },
+    type: Boolean,
   },
 });
 
