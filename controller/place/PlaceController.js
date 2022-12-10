@@ -78,6 +78,10 @@ const addPlace = async (req, res) => {
     internalServerError(res, error);
   }
 };
+
+
+
+
 module.exports = {
-  addPlace,
+  addPlace
 };

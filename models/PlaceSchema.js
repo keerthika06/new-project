@@ -16,13 +16,13 @@ const PlaceSchema = new mongoose.Schema({
       //required: true,
     },
   },
-  rating: { type: Number },
+  rating: { type: Number,default: 0, },
   description: { type: String },
   address: { type: String },
   stars: {
     type: Number,
     enum: [1, 2, 3, 4],
-    //   default: "Inprogress",
+       default: 1,
   },
   phone: { type: String },
   photos: [
@@ -63,27 +63,35 @@ const PlaceSchema = new mongoose.Schema({
 
   acceptsCreditCard: {
     type: Boolean,
+    default: false
   },
   delivery: {
     type: Boolean,
+    default: false
   },
   dogFriendly: {
     type: Boolean,
+    default: false
   },
   familyFriendly: {
     type: Boolean,
+    default: false
   },
   inWalkingDistance: {
     type: Boolean,
+    default: false
   },
   outdoorSeating: {
     type: Boolean,
+    default: false
   },
   parking: {
     type: Boolean,
+    default: false
   },
   wifi: {
     type: Boolean,
+    default: false
   },
 });
 
