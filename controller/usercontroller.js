@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
 const { sendEmail } = require("../utils/sendEmail");
 
-
 const register = async (req, res) => {
   if (!req.body)
     res
@@ -33,7 +32,7 @@ const register = async (req, res) => {
       message: "User with this email already present",
     });
 
-  bcrypt.hash(password.toString(), constants.SALT_ROUNDS, async (err, hash) => {
+  bcrypt.hash(password, constant.SALT_ROUNDS, async (err, hash) => {
     if (err)
       return res.status(500).json({
         status: false,
@@ -83,72 +82,66 @@ const register = async (req, res) => {
     }
   });
 };
-const login = async (req,res) => {
+const login = async (req, res) => {
   try {
-    let {email,password} = req.body;
-    User.findOne({email},async(err,docs)=>{
-      if(err)
-      return res.status(404).json({
-        status:false,
-        statusCode:404,
-        message: " User not found"
-      })
-      if (docs){
-        let dbPassword = docs.password
-        bcrypt.compare(password.toString(),dbPassword,async(err,result)=>{
-          if(err)
-          return res.status(404).json({
-            status : false,
-            statusCode :404,
-            message:"USer not found" 
-          })
+    let { email, password } = req.body;
+    User.findOne({ email }, async (err, docs) => {
+      if (err)
+        return res.status(404).json({
+          status: false,
+          statusCode: 404,
+          message: " User not found",
+        });
+      if (docs) {
+        let dbPassword = docs.password;
+        bcrypt.compare(password.toString(), dbPassword, async (err, result) => {
+          if (err)
+            return res.status(404).json({
+              status: false,
+              statusCode: 404,
+              message: "USer not found",
+            });
 
           if (result == true) {
-          const accessToken= jwt.sign(
-            { userId:docs,email:docs.email},
-          process.env.ACCESS_TOKEN_SECRET,
-          {expiresIn:"1h"}
-          )
-          const refreshToken = jwt.sign(
-            {userId : docs._id,email:docs.email},
-            process.env.REFRESH_TOKEN_SECRET,
-            {expiresIn:"1d"}
-          )
-          await User.updateOne({_id:docs._id},{refreshToken})
-          res.header("Refreh-Token",refreshToken)
-          res.header("Authorization","Bearer"+accessToken)
-          return res.status(200).json({
-            status:true,
-            statusCode:200,
-            message:"User logged in succssfully"
-          })
-        }else
+            const accessToken = jwt.sign(
+              { userId: docs, email: docs.email },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: "1h" }
+            );
+            const refreshToken = jwt.sign(
+              { userId: docs._id, email: docs.email },
+              process.env.REFRESH_TOKEN_SECRET,
+              { expiresIn: "1d" }
+            );
+            await User.updateOne({ _id: docs._id }, { refreshToken });
+            res.header("Refreh-Token", refreshToken);
+            res.header("Authorization", "Bearer" + accessToken);
+            return res.status(200).json({
+              status: true,
+              statusCode: 200,
+              message: "User logged in succssfully",
+            });
+          } else
+            return res.status(401).json({
+              status: false,
+              statusCode: 401,
+              message: "Invalid email or password",
+            });
+        });
+      } else
         return res.status(401).json({
           status: false,
           statusCode: 401,
           message: "Invalid email or password",
-        })
-      })
-      }else
-      return res.status(401).json({
-        status: false,
-        statusCode: 401,
-        message: "Invalid email or password",
-      });
-
-    })
-
-
-  }
-  catch(error) {
+        });
+    });
+  } catch (error) {
     console.log("error from register", error);
     internalServerError(res, error);
   }
-
-
-}
+};
 
 module.exports = {
   register,
-  login
+  login,
 };

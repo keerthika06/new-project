@@ -2,11 +2,25 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: { type: String },
-  email: { type: String},
+  email: { type: String },
   phone: { type: String },
-  password: { type: String},
-  gender: { type: String, enum: ["Male", "Female"] },
-  city: { type: String },
+  password: { type: String },
+  profilePic: {
+    public_id: {
+      type: String,
+      // required: true,
+    },
+    url: {
+      type: String,
+      //required: true,
+    },
+  },
+  fav: [
+    {
+      placeId: { type: String },
+    },
+  ],
+  // friends: [{ type : ObjectId, ref: 'User' }],
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);
