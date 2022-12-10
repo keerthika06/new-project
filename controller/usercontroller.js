@@ -106,7 +106,7 @@ const login = async (req, res) => {
             const accessToken = jwt.sign(
               { userId: docs, email: docs.email },
               process.env.ACCESS_TOKEN_SECRET,
-              { expiresIn: "1h" }
+              { expiresIn: "6h" }
             );
             const refreshToken = jwt.sign(
               { userId: docs._id, email: docs.email },
@@ -115,7 +115,7 @@ const login = async (req, res) => {
             );
             await User.updateOne({ _id: docs._id }, { refreshToken });
             res.header("Refreh-Token", refreshToken);
-            res.header("Authorization", "Bearer" + accessToken);
+            res.header("Authorization", "Bearer  " + accessToken);
             return res.status(200).json({
               status: true,
               statusCode: 200,
@@ -144,4 +144,5 @@ const login = async (req, res) => {
 module.exports = {
   register,
   login,
+
 };
