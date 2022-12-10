@@ -9,7 +9,7 @@ const addReview = async(req,res)=>{
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-        const {placeId,reviewtext,date}=req.body
+        const {placeId,reviewText,date}=req.body
         const {  userId } = req.users;
         const reviewPic = req.file.path;
         const cloudinaryResult = await cloudinary.uploader.upload(reviewPic, {
@@ -20,7 +20,7 @@ const addReview = async(req,res)=>{
                 public_id: cloudinaryResult.public_id,
         url: cloudinaryResult.secure_url,
             },
-            reviewtext,
+            reviewText,
             date
           }
           const result = await Place.findByIdAndUpdate(
