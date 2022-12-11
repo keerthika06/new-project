@@ -79,15 +79,36 @@ const addPlace = async (req, res) => {
   }
 };
 
-// const getPlace = async (req, res) => {
-//   try {
+const getParticularPlace = async (req, res) => {
+  try {
+    const { placeId } = req.body;
+    // if (!mongoose.isValidObjectId(placeId))
+    //   return res
+    //     .status(400)
+    //     .json({ status: false, statusCode: 400, message: "Id not valid" });
+    const place = await Place.findOne({ _id: placeId }).select(
+      "placeName placePic description overview address phone latitude longitude"
+    );
 
-
-//   }
-
-
-
+    if (!place) 
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "Place does not exist",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Places fetched",
+      data: place,
+    });
+  } catch (error) {
+    console.log("Error from get place", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
-  addPlace
+  addPlace,
+  getParticularPlace,
 };

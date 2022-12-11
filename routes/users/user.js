@@ -8,6 +8,7 @@ const favoriteController = require("../../controller/FavoriteController")
 router.route("/").post(userController.register);
 router.route("/login").post(userController.login);
 
+
 router.route("/add-feedback").post(feedbackController.addFeedback);
 router.route("/add-favorite").post(favoriteController.addFavorite)
 
