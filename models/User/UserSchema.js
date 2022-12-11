@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: { type: String },
-  email: { type: String },
+  email: { type: String},
   phone: { type: String },
-  password: { type: String },
+  password: { type: String},
   profilePic: {
     public_id: {
       type: String,
@@ -17,15 +17,12 @@ const UserSchema = new mongoose.Schema({
   },
   fav: [
     {
-      placeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "placeModel",
-      },
+      placeId: { type: String },
     },
   ],
-  feedback: [{ type: String }],
-  // friends: [{ type : ObjectId, ref: 'User' }],
+  
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);
 module.exports = UserModel;
+//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

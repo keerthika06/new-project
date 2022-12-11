@@ -10,16 +10,44 @@ const addPhoto = async(req,res) =>{
         return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-        const { tournamentId} =req.body;
+        const { placeId} =req.body;
+        const {  userId } = req.users;
         const photos = req.file.path
 
         const cloudinaryResult = await cloudinary.uploader.upload(photos, {
-            folder: "pictures",
+            folder: "image",
           });
-          
+          const obj = {
+            placeId,userId,photos:{
+                public_id: cloudinaryResult.public_id,
+        url: cloudinaryResult.secure_url,
+            },
+    
+          }
+
+
+
+
+
+          const result = await Place.findByIdAndUpdate(
+            {_id:placeId},
+            // {_id:userId},
+            {$push : { photos : obj}},
+          )
+          res.status(200).json({
+            status: true,
+            statusCode: 200,
+            message: "Added photo successfully",
+            data: result,
+          });
+
 
     }
-    catch{
-
-    }
+    catch(error) {
+        console.log("Error, couldn't add photo", error);
+        internalServerError(res, error);
+      }
+}
+module.exports={
+    addPhoto
 }
