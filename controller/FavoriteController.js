@@ -1,36 +1,37 @@
 const { User } = require("../models/index");
-
+const { Place } = require("../models/index");
 const { internalServerError } = require("../utils/commonErrors");
 const constants = require("../utils/constant");
 const { default: mongoose } = require("mongoose");
 
-const addFeedback = async (req, res) => {
+const addFavorite = async (req, res) => {
   try {
     if (!req.body)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId, userId } = req.body;
 
     //const { userId } = req.users;
-    const { userId, feedbackText } = req.body;
 
     const result = await User.findByIdAndUpdate(
+      //{ _id: placeId },
       { _id: userId },
 
-      { $push: { feedbackText: feedbackText } },
+      { $push: { favorite: placeId } },
       { new: true }
     );
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Added feedback successfully",
+      message: "Added favorite successfully",
       data: result,
     });
   } catch (error) {
-    console.log("Error, couldn't add feedback", error);
+    console.log("Error, couldn't add favorite", error);
     internalServerError(res, error);
   }
 };
 module.exports = {
-  addFeedback,
+  addFavorite,
 };

@@ -32,7 +32,7 @@ const register = async (req, res) => {
       message: "User with this email already present",
     });
 
-  bcrypt.hash(password, constant.SALT_ROUNDS, async (err, hash) => {
+  bcrypt.hash(password, constants.SALT_ROUNDS, async (err, hash) => {
     if (err)
       return res.status(500).json({
         status: false,
@@ -144,5 +144,4 @@ const login = async (req, res) => {
 module.exports = {
   register,
   login,
-
 };

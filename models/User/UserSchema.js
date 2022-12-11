@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: { type: String },
-  email: { type: String},
+  email: { type: String },
   phone: { type: String },
-  password: { type: String},
+  password: { type: String },
   profilePic: {
     public_id: {
       type: String,
@@ -15,12 +15,20 @@ const UserSchema = new mongoose.Schema({
       //required: true,
     },
   },
-  fav: [
+  favorite: [
     {
-      placeId: { type: String },
+      //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
+      listOfPlaceId: {
+        type: String,
+      },
+    },
+    //{ type: Boolean, default: false },
+  ],
+  feedbackText: [
+    {
+      type: String,
     },
   ],
-  
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);

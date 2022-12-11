@@ -79,6 +79,12 @@ const addPlace = async (req, res) => {
   }
 };
 
+// const getPlace = async (req, res) => {
+//   try {
+
+
+//   }
+
 
 
 
