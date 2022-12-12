@@ -16,14 +16,17 @@ const PlaceSchema = new mongoose.Schema({
       //required: true,
     },
   },
-  rating: { type: Number, enum: [0, 1, 2, 3, 4, 5], default: 0 },
+  rating: { type: Number, default: 0 },
+  countRating: { type: Number, default: 0 },
+
+  //  enum: [0, 1, 2, 3, 4, 5], default: 0 },
   description: { type: String },
   address: { type: String },
-  // stars: {
-  //   type: Number,
-  //   enum: [1, 2, 3, 4],
-  //   default: 1,
-  // },
+  stars: {
+    type: Number,
+    enum: [1, 2, 3, 4],
+    default: 1,
+  },
   phone: { type: String },
   photos: [
     {
