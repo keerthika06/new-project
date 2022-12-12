@@ -8,11 +8,13 @@ const calculateRating = async (rating, placeId) => {
     {
       _id: placeId,
     },
-    { $inc: { countRating: 1 } }
+    { $inc: { countRating: 1 } },
+    { new: true }
+    // { returnDocument: "after" }
   );
   console.log("yesssssssssss", countRatings);
   console.log("meddddddd", rating);
-  let countRatingg = countRatings.countRating + 1;
+  let countRatingg = countRatings.countRating;
   let old_rating = countRatings.rating;
   console.log("Zooooooooo", countRatingg);
   console.log("YOOOO", old_rating);
@@ -22,7 +24,8 @@ const calculateRating = async (rating, placeId) => {
     {
       placeId,
     },
-    { rating: new_rating }
+    { rating: new_rating },
+    { new: true }
   );
 
   console.log("hellooooo", countRatings);
@@ -44,11 +47,11 @@ const addRating = async (req, res) => {
       return res.json({ message: "Please select rating between 0 to 10" });
     }
 
-    let ratee = calculateRating(rating, placeId);
+    let ratee = await calculateRating(rating, placeId);
 
     const result = await Place.findByIdAndUpdate(
       placeId,
-      { ratee },
+      { rating: ratee },
       { new: true }
     );
 

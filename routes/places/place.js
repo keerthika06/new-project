@@ -10,7 +10,7 @@ const verifyJWT = require("../../middleware/verifyJWT");
 router
   .route("/")
   .post(verifyJWT, upload.single("image"), PlaceController.addPlace)
-  .get(PlaceController.getParticularPlace);
+  .get(verifyJWT, PlaceController.getParticularPlace);
 router
   .route("/review")
   .post(verifyJWT, upload.single("image"), ReviewController.addReview);
