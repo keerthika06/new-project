@@ -11,15 +11,15 @@ const addFeedback = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
 
-    //const { userId } = req.users;
-    const { userId, feedbackText } = req.body;
+    const { userId } = req.users;
+    console.log(userId);
 
-    const result = await User.findByIdAndUpdate(
-      { _id: userId },
+    const feedbackText = req.body;
 
-      { $push: { feedbackText: feedbackText } },
-      { new: true }
-    );
+    const user = await User.findByIdAndUpdate(userId, feedbackText);
+    const result = await user.save();
+    
+
     res.status(200).json({
       status: true,
       statusCode: 200,

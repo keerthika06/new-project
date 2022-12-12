@@ -2,15 +2,20 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const userController = require("../../controller/usercontroller");
+const verifyJWT = require("../../middleware/verifyJWT");
+const checkUserLoggedIn = require("../../middleware/checkUserIsLoggedIn");
 const feedbackController = require("../../controller/FeedbackController");
-const favoriteController = require("../../controller/FavoriteController")
+const favoriteController = require("../../controller/FavoriteController");
 
 router.route("/").post(userController.register);
 router.route("/login").post(userController.login);
 
-
-router.route("/add-feedback").post(feedbackController.addFeedback);
-router.route("/add-favorite").post(favoriteController.addFavorite)
+router
+  .route("/add-feedback")
+  .post(checkUserLoggedIn, feedbackController.addFeedback);
+router
+  .route("/add-favorite")
+  .post(checkUserLoggedIn, favoriteController.addFavorite);
 
 module.exports = router;
 

@@ -16,19 +16,15 @@ const UserSchema = new mongoose.Schema({
     },
   },
   favorite: [
-    {
-      //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
-      listOfPlaceId: {
-        type: String,
-      },
-    },
+    //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
+
+    { type: String },
+
     //{ type: Boolean, default: false },
   ],
-  feedbackText: [
-    {
-      type: String,
-    },
-  ],
+  feedbackText: {
+    type: String,
+  },
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);

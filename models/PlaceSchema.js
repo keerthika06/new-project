@@ -16,14 +16,14 @@ const PlaceSchema = new mongoose.Schema({
       //required: true,
     },
   },
-  rating: { type: Number,default: 0, },
+  rating: { type: Number, enum: [0, 1, 2, 3, 4, 5], default: 0 },
   description: { type: String },
   address: { type: String },
-  stars: {
-    type: Number,
-    enum: [1, 2, 3, 4],
-       default: 1,
-  },
+  // stars: {
+  //   type: Number,
+  //   enum: [1, 2, 3, 4],
+  //   default: 1,
+  // },
   phone: { type: String },
   photos: [
     {
@@ -44,7 +44,7 @@ const PlaceSchema = new mongoose.Schema({
         ref: "UserModel",
       },
       reviewtext: { type: String, required: true },
-      date: { type: String, required: true },
+      date: { type: Date, required: true },
       reviewPic: {
         public_id: {
           type: String,
@@ -57,41 +57,42 @@ const PlaceSchema = new mongoose.Schema({
       },
     },
   ],
-
-  latitude: { type: String },
-  longitude: { type: String },
+  placeLatLong: {
+    latitude: { type: String },
+    longitude: { type: String },
+  },
 
   acceptsCreditCard: {
     type: Boolean,
-    default: false
+    default: false,
   },
   delivery: {
     type: Boolean,
-    default: false
+    default: false,
   },
   dogFriendly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   familyFriendly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   inWalkingDistance: {
     type: Boolean,
-    default: false
+    default: false,
   },
   outdoorSeating: {
     type: Boolean,
-    default: false
+    default: false,
   },
   parking: {
     type: Boolean,
-    default: false
+    default: false,
   },
   wifi: {
     type: Boolean,
-    default: false
+    default: false,
   },
 });
 

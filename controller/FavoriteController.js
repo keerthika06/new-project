@@ -10,13 +10,12 @@ const addFavorite = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId, userId } = req.body;
+    const { placeId } = req.body;
 
-    //const { userId } = req.users;
+    const { userId } = req.users;
 
     const result = await User.findByIdAndUpdate(
-      //{ _id: placeId },
-      { _id: userId },
+      userId,
 
       { $push: { favorite: placeId } },
       { new: true }
