@@ -96,6 +96,12 @@ const getParticularPlace = async (req, res) => {
         statusCode: 401,
         message: "Place does not exist",
       });
+
+      // const rating = 
+      // const photos=
+      // const review =
+
+
     res.status(200).json({
       status: true,
       statusCode: 200,

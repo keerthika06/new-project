@@ -37,6 +37,7 @@ const PlaceSchema = new mongoose.Schema({
       },
     },
   ],
+  overview: { type: String },
   review: [
     {
       userId: {
