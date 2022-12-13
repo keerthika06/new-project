@@ -70,6 +70,24 @@ const getPhoto = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const getParticularPhoto = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId } = req.body;
+    const { photoId } = req.body;
+    const { userId } = req.users;
+    const photos = await Place.findOne({ _id: placeId }).select("photos");
+    const user = await User.findOne({ _id: userId });
+    if (!photos) {
+    }
+  } catch (error) {
+    console.log("Error from get particular photos", error);
+    internalServerError(res, error);
+  }
+};
 module.exports = {
   addPhoto,
   getPhoto,
