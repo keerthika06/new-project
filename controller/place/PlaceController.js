@@ -153,7 +153,40 @@ const nearMe = async (req, res) => {
       data: nearPlaces,
     });
   } catch (error) {
-    console.log("Error from create tournament", error);
+    console.log("Error from near you", error);
+    internalServerError(res, error);
+  }
+};
+
+const searchPlace = async (req, res) => {
+  try {
+    const result = await Place.find({
+      $or: [
+        {
+          placeName: { $regex: req.body.text, $options: "i" },
+        },
+        { description: { $regex: req.body.text, $options: "i" } },
+        {
+          address: { $regex: req.body.text, $options: "i" },
+        },
+      ],
+    }).select("placeName placePic address rating phone");
+    if (result) {
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Places fetched",
+        data: result,
+      });
+    } else {
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "no match",
+      });
+    }
+  } catch (error) {
+    console.log("Error from search place", error);
     internalServerError(res, error);
   }
 };
@@ -162,4 +195,5 @@ module.exports = {
   addPlace,
   getParticularPlace,
   nearMe,
+  searchPlace,
 };
