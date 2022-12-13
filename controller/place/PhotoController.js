@@ -11,18 +11,19 @@ const addPhoto = async (req, res) => {
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { placeId } = req.body;
     const { userId } = req.users;
-    const photos = req.file.path;
+    const picture = req.file.path;
 
-    const cloudinaryResult = await cloudinary.uploader.upload(photos, {
+    const cloudinaryResult = await cloudinary.uploader.upload(picture, {
       folder: "image",
     });
     const obj = {
       placeId,
       userId,
-      photos: {
+      picture: {
         public_id: cloudinaryResult.public_id,
         url: cloudinaryResult.secure_url,
       },
+      dates: Date.now(),
     };
 
     const result = await Place.findByIdAndUpdate(

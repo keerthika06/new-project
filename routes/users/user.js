@@ -9,6 +9,7 @@ const favoriteController = require("../../controller/FavoriteController");
 
 router.route("/").post(userController.register);
 router.route("/login").post(userController.login);
+router.route("/updateProfilePic").put(userController.updateUserProfilePic);
 
 router
   .route("/add-feedback")

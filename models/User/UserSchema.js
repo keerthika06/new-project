@@ -9,18 +9,22 @@ const UserSchema = new mongoose.Schema({
     public_id: {
       type: String,
       // required: true,
+      default:
+        "https://res.cloudinary.com/dodityyjl/image/upload/v1670903393/image/hb8o0wr3rr9rompysw9g.jpg",
     },
     url: {
       type: String,
       //required: true,
     },
+    // default:
+    //   "https://res.cloudinary.com/dodityyjl/image/upload/v1670903393/image/hb8o0wr3rr9rompysw9g.jpg",
   },
   favorite: [
-    //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
-
-    { type: String },
-
-    //{ type: Boolean, default: false },
+    {
+      //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
+      placeId: { type: String },
+      //{ type: Boolean, default: false },
+    },
   ],
   feedbackText: {
     type: String,

@@ -30,14 +30,18 @@ const PlaceSchema = new mongoose.Schema({
   phone: { type: String },
   photos: [
     {
-      public_id: {
-        type: String,
-        // required: true,
+      picture: {
+        public_id: {
+          type: String,
+          // required: true,
+        },
+        url: {
+          type: String,
+          //required: true,
+        },
       },
-      url: {
-        type: String,
-        //required: true,
-      },
+
+      dates: { type: Date },
     },
   ],
   overview: { type: String },
@@ -61,9 +65,19 @@ const PlaceSchema = new mongoose.Schema({
       },
     },
   ],
-  placeLatLong: {
-    latitude: { type: String },
-    longitude: { type: String },
+  category: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: {
+      type: String,
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
   },
 
   acceptsCreditCard: {
@@ -99,6 +113,6 @@ const PlaceSchema = new mongoose.Schema({
     default: false,
   },
 });
-
+PlaceSchema.index({ location: "2dsphere" });
 const PlaceModel = mongoose.model("PlaceModel", PlaceSchema);
 module.exports = PlaceModel;

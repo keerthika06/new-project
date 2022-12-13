@@ -19,10 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 router.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("welcome");
+});
 databaseConnect();
 app.use("/", router);
 app.use("/api/user", userRouter);
-
 
 app.use("/api/refresh", refreshRouter);
 app.use("/api/otp", otpRouter);

@@ -12,8 +12,8 @@ const addPlace = async (req, res) => {
       overview,
       address,
       phone,
-      latitude,
-      longitude,
+      category,
+      location,
       acceptsCreditCard,
       delivery,
       dogFriendly,
@@ -46,9 +46,10 @@ const addPlace = async (req, res) => {
       overview,
       address,
       phone,
-      latitude,
-      longitude,
-      email,
+      category,
+      location,
+      //email,
+
       acceptsCreditCard,
       delivery,
       dogFriendly,
@@ -70,7 +71,7 @@ const addPlace = async (req, res) => {
       res.status(400).json({
         status: false,
         statusCode: 400,
-        message: "Couldn't create tournament",
+        message: "Couldn't create Place",
         data: {},
       });
   } catch (error) {
@@ -109,9 +110,9 @@ const getParticularPlace = async (req, res) => {
 
     const data = {
       placeDetails: place,
-      rating: user.rating,
+      //rating: user.rating,
     };
-    console.log("ratinggg", user.rating);
+    //console.log("ratinggg", user.rating);
     res.status(200).json({
       status: true,
       statusCode: 200,

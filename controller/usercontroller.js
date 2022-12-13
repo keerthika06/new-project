@@ -13,7 +13,7 @@ const register = async (req, res) => {
     res
       .status(400)
       .json({ status: false, statusCode: 400, message: "body not found" });
-  const { email, phone, password } = req.body;
+  const { email, phone, name, password } = req.body;
 
   const validationErrors = validationResult(req);
 
@@ -45,6 +45,7 @@ const register = async (req, res) => {
       const user = new User({
         email,
         phone,
+        name,
         password: hashedPassword,
       });
       const result = await user.save();
@@ -140,8 +141,48 @@ const login = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const updateUserProfilePic = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    let updatePic = {};
+    let cloudinaryResult = {};
+    if (req.file) {
+      updatePic = req.file.path;
+      cloudinaryResult = await cloudinary.uploader.upload(updatePic, {
+        folder: "image",
+      });
+      updatePic = {
+        public_id: cloudinaryResult.public_id,
+        url: cloudinaryResult.secure_url,
+      };
+    } else {
+      return res.status(404).json({
+        message: "Please send user profile pic to update",
+      });
+    }
+    const user = await User.findOneAndUpdate({ _id: userId }, updatePic, {
+      new: true,
+    });
+    if (user)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "profile updated successfully",
+        data: umpire,
+      });
+    res.status(404).json({
+      status: false,
+      statusCode: 400,
+      message: "profile cannot be updated",
+    });
+  } catch (error) {
+    console.log("error from update umpire", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   register,
   login,
+  updateUserProfilePic,
 };
