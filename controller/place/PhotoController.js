@@ -42,6 +42,35 @@ const addPhoto = async (req, res) => {
     internalServerError(res, error);
   }
 };
+
+const getPhoto = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId } = req.body;
+    const photos = await Place.findOne({ _id: placeId }).select("photos");
+    console.log(photos);
+    if (!photos)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No photos are added to this place.",
+      });
+
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Photos fetched",
+      data: photos.photos,
+    });
+  } catch (error) {
+    console.log("Error from get photos", error);
+    internalServerError(res, error);
+  }
+};
 module.exports = {
   addPhoto,
+  getPhoto,
 };

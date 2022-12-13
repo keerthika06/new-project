@@ -18,6 +18,7 @@ router.route("/rating").post(verifyJWT, RatingController.addRating);
 
 router
   .route("/photo")
-  .post(verifyJWT, upload.single("image"), PhotoController.addPhoto);
+  .post(verifyJWT, upload.single("image"), PhotoController.addPhoto)
+  .get(PhotoController.getPhoto);
 
 module.exports = router;
