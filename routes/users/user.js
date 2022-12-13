@@ -4,7 +4,7 @@ const { body } = require("express-validator");
 const userController = require("../../controller/usercontroller");
 const verifyJWT = require("../../middleware/verifyJWT");
 const checkUserLoggedIn = require("../../middleware/checkUserIsLoggedIn");
-const feedbackController = require("../../controller/FeedbackController");
+const feedbackController = require("../../controller/FeedbackCOntroller");
 const favoriteController = require("../../controller/FavoriteController");
 
 router.route("/").post(userController.register);
