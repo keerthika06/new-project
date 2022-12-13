@@ -11,6 +11,7 @@ router
   .route("/")
   .post(verifyJWT, upload.single("image"), PlaceController.addPlace)
   .get(verifyJWT, PlaceController.getParticularPlace);
+router.route("/near-me").get(PlaceController.nearMe);
 router
   .route("/review")
   .post(verifyJWT, upload.single("image"), ReviewController.addReview);

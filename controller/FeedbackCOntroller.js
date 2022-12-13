@@ -18,13 +18,12 @@ const addFeedback = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(userId, feedbackText);
     const result = await user.save();
-    
 
     res.status(200).json({
       status: true,
       statusCode: 200,
       message: "Added feedback successfully",
-      data: result,
+      //data: result,
     });
   } catch (error) {
     console.log("Error, couldn't add feedback", error);

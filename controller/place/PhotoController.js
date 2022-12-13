@@ -92,4 +92,5 @@ const getParticularPhoto = async (req, res) => {
 module.exports = {
   addPhoto,
   getPhoto,
+  getParticularPhoto,
 };

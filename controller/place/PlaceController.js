@@ -124,8 +124,42 @@ const getParticularPlace = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const nearMe = async (req, res) => {
+  try {
+    let x = parseFloat(req.body.latitude);
+    let y = parseFloat(req.body.longitude);
+
+    const nearPlaces = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [x, y],
+          },
+          key: "location",
+          maxDistance: parseInt(30) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+    ]);
+
+    console.log(nearPlaces);
+
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Near you Places fetched",
+      data: nearPlaces,
+    });
+  } catch (error) {
+    console.log("Error from create tournament", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   addPlace,
   getParticularPlace,
+  nearMe,
 };
