@@ -6,10 +6,13 @@ const verifyJWT = require("../../middleware/verifyJWT");
 const checkUserLoggedIn = require("../../middleware/checkUserIsLoggedIn");
 const feedbackController = require("../../controller/FeedbackCOntroller");
 const favoriteController = require("../../controller/FavoriteController");
+const upload = require("../../utils/multer");
 
 router.route("/").post(userController.register);
 router.route("/login").post(userController.login);
-router.route("/updateProfilePic").put(userController.updateUserProfilePic);
+router
+  .route("/updateProfilePic")
+  .put(upload.single("image"), userController.updateUserProfilePic);
 
 router
   .route("/add-feedback")

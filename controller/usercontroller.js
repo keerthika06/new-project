@@ -6,6 +6,7 @@ const constants = require("../utils/constant");
 const { internalServerError } = require("../utils/commonErrors");
 const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
+const cloudinary = require("../utils/cloudinaryConfig");
 const { sendEmail } = require("../utils/sendEmail");
 
 const register = async (req, res) => {
@@ -144,14 +145,15 @@ const login = async (req, res) => {
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.body;
-    let updatePic = {};
+
     let cloudinaryResult = {};
+    let profilePic = {};
     if (req.file) {
-      updatePic = req.file.path;
-      cloudinaryResult = await cloudinary.uploader.upload(updatePic, {
+      profilePic = req.file.path;
+      cloudinaryResult = await cloudinary.uploader.upload(profilePic, {
         folder: "image",
       });
-      updatePic = {
+      profilePic = {
         public_id: cloudinaryResult.public_id,
         url: cloudinaryResult.secure_url,
       };
@@ -160,7 +162,11 @@ const updateUserProfilePic = async (req, res) => {
         message: "Please send user profile pic to update",
       });
     }
-    const user = await User.findOneAndUpdate({ _id: userId }, updatePic, {
+    updatedData = {
+      profilePic,
+    };
+
+    const user = await User.findOneAndUpdate({ _id: userId }, updatedData, {
       new: true,
     });
     if (user)
@@ -168,7 +174,7 @@ const updateUserProfilePic = async (req, res) => {
         status: true,
         statusCode: 200,
         message: "profile updated successfully",
-        data: umpire,
+        data: user,
       });
     res.status(404).json({
       status: false,
@@ -176,7 +182,7 @@ const updateUserProfilePic = async (req, res) => {
       message: "profile cannot be updated",
     });
   } catch (error) {
-    console.log("error from update umpire", error);
+    console.log("error from update userProfilePic", error);
     internalServerError(res, error);
   }
 };
