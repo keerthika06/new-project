@@ -92,6 +92,8 @@ const getParticularPlace = async (req, res) => {
     const place = await Place.findOne({ _id: placeId }).select(
       "placeName placePic description photos review overview rating address phone latitude longitude"
     );
+    //place.viewCount++;
+    await Place.updateOne({ _id: placeId }, { $inc: { viewCount: 1 } }).exec();
 
     if (!place)
       return res.status(401).json({

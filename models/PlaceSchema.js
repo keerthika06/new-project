@@ -44,6 +44,10 @@ const PlaceSchema = new mongoose.Schema({
       dates: { type: Date },
     },
   ],
+  viewCount: {
+    type: Number,
+    default: 0,
+  },
   overview: { type: String },
   review: [
     {
