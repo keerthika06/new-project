@@ -18,6 +18,9 @@ router
   .post(verifyJWT, upload.single("image"), ReviewController.addReview)
   .get(ReviewController.getReview);
 router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
+router
+  .route("/get-Particular-Review-Photo")
+  .get(ReviewController.getParticularReviewPhoto);
 router.route("/rating").post(verifyJWT, RatingController.addRating);
 
 router

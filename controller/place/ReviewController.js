@@ -50,7 +50,7 @@ const getReview = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { placeId } = req.body;
-    const review = await Place.find({ _id: placeId })
+    const review = await Place.findOne({ _id: placeId })
       .select("review.reviewText review.date")
       .populate("review.userId", "name profilePic");
 
@@ -109,7 +109,27 @@ const getParticularReviewPhoto = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId } = req.body;
+    //const { placeId } = req.body;
+    const { reviewPicId } = req.body;
+    const place = await Place.findOne(
+      { review: { $elemMatch: { _id: reviewPicId } } },
+      { "review.$": 1 }
+    )
+      .select("reviewPic date")
+      .populate("review.userId", "name profilePic");
+    if (!place)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No photo is added to this review.",
+      });
+
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Review fetched",
+      data: place,
+    });
   } catch (error) {
     console.log("Error from get photos", error);
     internalServerError(res, error);
