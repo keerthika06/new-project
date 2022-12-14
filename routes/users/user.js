@@ -20,7 +20,8 @@ router
   .post(checkUserLoggedIn, feedbackController.addFeedback);
 router
   .route("/add-favorite")
-  .post(checkUserLoggedIn, favoriteController.addFavorite);
+  .post(checkUserLoggedIn, favoriteController.addFavorite)
+  .get(checkUserLoggedIn,favoriteController.getFavorite)
 
 module.exports = router;
 
