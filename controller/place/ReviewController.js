@@ -9,21 +9,21 @@ const addReview = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId, reviewText, date } = req.body;
+    const { placeId, reviewText } = req.body;
     const { userId } = req.users;
     const reviewPic = req.file.path;
     const cloudinaryResult = await cloudinary.uploader.upload(reviewPic, {
       folder: "image",
     });
     const obj = {
-      placeId,
+      //placeId,
       userId,
       reviewPic: {
         public_id: cloudinaryResult.public_id,
         url: cloudinaryResult.secure_url,
       },
       reviewText,
-      date,
+      date: Date.now(),
     };
     const result = await Place.findByIdAndUpdate(
       { _id: placeId },
@@ -42,6 +42,76 @@ const addReview = async (req, res) => {
     internalServerError(res, error);
   }
 };
+
+const getReview = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId } = req.body;
+    const review = await Place.findOne({ _id: placeId }).select("review");
+    console.log("hiiiiiiiiiiiiii", review);
+    if (!review)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No review are added to this place.",
+      });
+
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Review fetched",
+      data: review,
+    });
+  } catch (error) {
+    console.log("Error from get photos", error);
+    internalServerError(res, error);
+  }
+};
+
+const getReviewPhotos = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId } = req.body;
+    const reviewPicture = await Place.findOne({ _id: placeId }).select(
+      "review.reviewPic"
+    );
+    console.log("hiiiiiiiiiiiiii", reviewPicture);
+    if (!reviewPicture)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No review photos are added to this place.",
+      });
+
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Review Photos fetched",
+      data: reviewPicture,
+    });
+  } catch (error) {
+    console.log("Error from get photos", error);
+    internalServerError(res, error);
+  }
+};
+const getParticularReviewPhoto = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { placeId } = req.body;
+  } catch (error) {}
+};
 module.exports = {
   addReview,
+  getReview,
+  getReviewPhotos,
+  getParticularReviewPhoto,
 };

@@ -51,7 +51,7 @@ const PlaceSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserModel",
       },
-      reviewtext: { type: String, required: true },
+      reviewText: { type: String, required: true },
       date: { type: Date, required: true },
       reviewPic: {
         public_id: {

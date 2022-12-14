@@ -15,7 +15,9 @@ router.route("/near-me").get(PlaceController.nearMe);
 router.route("/search-place").get(PlaceController.searchPlace);
 router
   .route("/review")
-  .post(verifyJWT, upload.single("image"), ReviewController.addReview);
+  .post(verifyJWT, upload.single("image"), ReviewController.addReview)
+  .get(ReviewController.getReview);
+router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
 router.route("/rating").post(verifyJWT, RatingController.addRating);
 
 router
