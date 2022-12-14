@@ -13,6 +13,7 @@ router
   .get(verifyJWT, PlaceController.getParticularPlace);
 router.route("/near-me").get(PlaceController.nearMe);
 router.route("/search-place").get(PlaceController.searchPlace);
+router.route("/get-all-places").get(PlaceController.getAllPlace);
 router
   .route("/review")
   .post(verifyJWT, upload.single("image"), ReviewController.addReview)
