@@ -50,7 +50,10 @@ const getReview = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { placeId } = req.body;
-    const review = await Place.findOne({ _id: placeId }).select("review");
+    const review = await Place.find({ _id: placeId })
+      .select("review.reviewText review.date")
+      .populate("review.userId", "name profilePic");
+
     console.log("hiiiiiiiiiiiiii", review);
     if (!review)
       return res.status(401).json({
@@ -107,8 +110,12 @@ const getParticularReviewPhoto = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { placeId } = req.body;
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error from get photos", error);
+    internalServerError(res, error);
+  }
 };
+
 module.exports = {
   addReview,
   getReview,
