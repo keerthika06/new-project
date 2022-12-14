@@ -97,6 +97,7 @@ const getFavorite = async (req, res) => {
           {
             address: { $regex: searchParam, $options: "i" },
           },
+          
         ],
       })
         .select("favorite")

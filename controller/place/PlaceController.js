@@ -169,6 +169,9 @@ const searchPlace = async (req, res) => {
         {
           address: { $regex: req.body.text, $options: "i" },
         },
+        {
+          category: { $regex: req.body.text, $options: "i" },
+        },
       ],
     }).select("placeName placePic address rating phone");
     if (result) {
