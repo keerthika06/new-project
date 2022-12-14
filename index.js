@@ -12,6 +12,7 @@ const refreshRouter = require("./routes/users/refresh");
 const userRouter = require("./routes/users/user");
 const otpRouter = require("./routes/users/otp");
 const placeRouter = require("./routes/places/place");
+const adminRouter = require("./routes/admin/aboutus");
 //const feedbackRouter = require("./routes/users/user")
 
 const app = express();
@@ -29,5 +30,6 @@ app.use("/api/user", userRouter);
 app.use("/api/refresh", refreshRouter);
 app.use("/api/otp", otpRouter);
 app.use("/api/place", placeRouter);
+app.use("/api/admin", adminRouter);
 
 app.listen(port, () => console.log(`Running on port no ${port}`));
