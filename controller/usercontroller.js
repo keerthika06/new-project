@@ -142,6 +142,28 @@ const login = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const getProfile = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    //console.log("zzzzzzzzzzzz", userId);
+    const user = await User.find({ _id: userId }).select("name profilePic");
+    if (user)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Profile fetched successfully",
+        data: user,
+      });
+    res.status(404).json({
+      status: false,
+      statusCode: 400,
+      message: "Couldn't fetch Profile",
+    });
+  } catch (error) {
+    console.log("error from getProfile", error);
+    internalServerError(res, error);
+  }
+};
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -191,4 +213,5 @@ module.exports = {
   register,
   login,
   updateUserProfilePic,
+  getProfile,
 };

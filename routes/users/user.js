@@ -12,7 +12,8 @@ router.route("/").post(userController.register);
 router.route("/login").post(userController.login);
 router
   .route("/updateProfilePic")
-  .put(upload.single("image"), userController.updateUserProfilePic);
+  .put(upload.single("image"), userController.updateUserProfilePic)
+  .get(checkUserLoggedIn, userController.getProfile);
 
 router
   .route("/add-feedback")

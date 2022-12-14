@@ -30,6 +30,16 @@ const addFeedback = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const getFeedback = async(req,res)=>{
+  try{
+    
+
+  }
+  catch(error){
+
+  }
+}
 module.exports = {
   addFeedback,
+  getFeedback
 };
