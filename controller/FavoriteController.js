@@ -86,9 +86,29 @@ const getFavorite = async (req, res) => {
         });
       }
     } else {
-      console.log("Yooo");
-      const user = await User.find({
+      const user = await User.findOne({
         _id: userId,
+      }).select("favorite.placeId");
+      // result of user ------>>>>> favorite: [
+      //   {
+      //     placeId: udupi,
+      //   },
+      //   {
+      //     placeId: manglore,
+      //   },
+      //   {
+      //     placeId: kashmir,
+      //   },
+      // ];
+      const favouritePlaceIdsOfThatUser = user.favorite.map((e) => {
+        return e.placeId;
+      });
+      // result of favoritePlaceOfThatUser---->>>>>[
+      //   udupi,mangalorre,kashmir
+      // ]
+
+      const favouritePlaces = await Place.find({
+        _id: { $in: favouritePlaceIdsOfThatUser },
         $or: [
           {
             placeName: { $regex: searchParam, $options: "i" },
@@ -97,20 +117,15 @@ const getFavorite = async (req, res) => {
           {
             address: { $regex: searchParam, $options: "i" },
           },
-          
         ],
-      })
-        .select("favorite")
-        .populate(
-          "favorite.placeId",
-          "placeName placePic description rating stars address"
-        );
+      }).select("placeName placePic description rating stars address");
+
       if (user) {
         res.status(200).json({
           status: true,
           statusCode: 200,
           message: "searched favorite fetched",
-          data: user,
+          data: favouritePlaces,
         });
       } else {
         return res.status(401).json({
