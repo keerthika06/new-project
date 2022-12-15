@@ -4,7 +4,9 @@ const PlaceController = require("../../controller/place/PlaceController");
 const ReviewController = require("../../controller/place/ReviewController");
 const RatingController = require("../../controller/place/RatingController");
 const PhotoController = require("../../controller/place/PhotoController");
+const FilterController = require("../../controller/place/FilterController");
 const upload = require("../../utils/multer");
+
 const verifyJWT = require("../../middleware/verifyJWT");
 
 router
@@ -21,6 +23,9 @@ router
   .post(verifyJWT, upload.single("image"), ReviewController.addReview)
   .get(ReviewController.getReview);
 router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
+
+router.route("/find-filter").get(FilterController.findFilter);
+
 router
   .route("/get-Particular-Review-Photo")
   .get(ReviewController.getParticularReviewPhoto);

@@ -208,10 +208,46 @@ const updateUserProfilePic = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const logout = (req, res) => {
+  try {
+    const refreshHeader = req.headers["refresh-token"];
+    if (!refreshHeader)
+      return res.status(204).json({
+        // status: false, // statusCode: 204,// message: "No refresh token found so already logged out",
+      });
+
+    User.findOneAndUpdate(
+      { refreshToken: refreshHeader },
+      { refreshToken: "" },
+      (err, docs) => {
+        console.log(docs);
+        // TODO: check if docs empty and add response for that
+        if (!docs)
+          return res.status(404).json({
+            status: false,
+            statusCode: 404,
+            message: "No refresh token matched",
+          });
+        delete req.headers["refresh-token"];
+        delete req.headers["authorization"];
+
+        res.json({
+          status: true,
+          statusCode: 200,
+          message: "User logged out successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.log("error from logout", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   register,
   login,
   updateUserProfilePic,
   getProfile,
+  logout,
 };

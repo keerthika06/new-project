@@ -9,7 +9,7 @@ const favoriteController = require("../../controller/FavoriteController");
 const upload = require("../../utils/multer");
 
 router.route("/").post(userController.register);
-router.route("/login").post(userController.login);
+router.route("/login").post(userController.login).delete(userController.logout);
 router
   .route("/updateProfilePic")
   .put(upload.single("image"), userController.updateUserProfilePic)
@@ -21,7 +21,7 @@ router
 router
   .route("/add-favorite")
   .post(checkUserLoggedIn, favoriteController.addFavorite)
-  .get(checkUserLoggedIn,favoriteController.getFavorite)
+  .get(checkUserLoggedIn, favoriteController.getFavorite);
 
 module.exports = router;
 

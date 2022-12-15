@@ -10,3 +10,24 @@ dubai--->25.2048° N, 55.2708
 assam--->26.2006° N, 92.9376
 goa----->15.2993° N, 74.1240
 Resturant", "Shopping", "Attraction", "Services
+
+
+
+{
+    "latitude":15.2993,
+      "longitude":74.1240,
+      "radius":10,
+      "star":2,
+      "acceptsCreditCard":1,
+      "delivery":1,
+      "dogFriendly":1,
+      "familyFriendly":0,
+      "inWalkingDistance":1,
+      "outdoorSeating":1,
+      "parking":0,
+      "wifi":0,
+      "sortBy":"ratings",
+      "text":"hii"
+   
+    
+}
