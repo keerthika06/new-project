@@ -197,6 +197,54 @@ const searchPlace = async (req, res) => {
 };
 const getPopular = async (req, res) => {
   try {
+    const allPlaces = await Place.find({})
+      .select(
+        "placeName placePic description photos review overview rating address phone location"
+      )
+      .sort([["viewCount", -1]]);
+    if (allPlaces) {
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Places fetched",
+        data: allPlaces,
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "No Place is found",
+        data: allPlaces,
+      });
+    }
+  } catch (error) {
+    console.log("Error from search place", error);
+    internalServerError(res, error);
+  }
+};
+
+const getTopPicks = async (req, res) => {
+  try {
+    const allPlaces = await Place.find({})
+      .select(
+        "placeName placePic description photos review overview rating address phone location"
+      )
+      .sort([["rating", -1]]);
+    if (allPlaces) {
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Places fetched",
+        data: allPlaces,
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "No Place is found",
+        data: allPlaces,
+      });
+    }
   } catch (error) {
     console.log("Error from search place", error);
     internalServerError(res, error);
@@ -235,4 +283,6 @@ module.exports = {
   searchPlace,
   getPopular,
   getAllPlace,
+  getTopPicks,
+  // 8fe1a3b448d7df1eeaecbe25d62e0a59826d6bd6
 };
