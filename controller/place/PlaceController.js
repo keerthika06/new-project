@@ -139,7 +139,7 @@ const nearMe = async (req, res) => {
             coordinates: [x, y],
           },
           key: "location",
-          maxDistance: parseInt(30) * 1609,
+          maxDistance: parseInt(100) * 1609,
           distanceField: "dist.calculated",
           spherical: true,
         },
