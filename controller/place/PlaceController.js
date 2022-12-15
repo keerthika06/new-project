@@ -234,5 +234,5 @@ module.exports = {
   nearMe,
   searchPlace,
   getPopular,
-  getAllPlace
+  getAllPlace,
 };
