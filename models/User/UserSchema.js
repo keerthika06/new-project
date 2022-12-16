@@ -29,6 +29,7 @@ const UserSchema = new mongoose.Schema({
   feedbackText: {
     type: String,
   },
+  refreshToken: { type: String },
 });
 
 const UserModel = mongoose.model("UserModel", UserSchema);

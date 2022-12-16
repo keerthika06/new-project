@@ -65,7 +65,7 @@ const register = async (req, res) => {
         await User.updateOne({ _id: result._id }, { refreshToken });
 
         res.header("Refresh-Token", refreshToken);
-        res.header("AUthorization", "Bearer " + accessToken);
+        res.header("Authorization", "Bearer " + accessToken);
         res.status(200).json({
           status: true,
           statusCode: 200,
