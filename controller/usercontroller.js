@@ -58,7 +58,6 @@ const register = async (req, res) => {
           { expiresIn: "1h" }
         );
 
-        
         const refreshToken = jwt.sign(
           { userId: result._id, email: result.email },
           process.env.REFRESH_TOKEN_SECRET,
@@ -196,7 +195,7 @@ const updateUserProfilePic = async (req, res) => {
 
     const user = await User.findOneAndUpdate({ _id: userId }, updatedData, {
       new: true,
-    });
+    }).select("profilePic name email phone");
     if (user)
       return res.status(200).json({
         status: true,

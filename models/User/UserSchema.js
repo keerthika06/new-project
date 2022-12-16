@@ -26,9 +26,11 @@ const UserSchema = new mongoose.Schema({
       //{ type: Boolean, default: false },
     },
   ],
-  feedbackText: {
-    type: String,
-  },
+  feedbackText: [
+    {
+      type: String,
+    },
+  ],
   refreshToken: { type: String },
 });
 

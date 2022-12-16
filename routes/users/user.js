@@ -19,6 +19,9 @@ router
   .route("/add-feedback")
   .post(checkUserLoggedIn, feedbackController.addFeedback);
 router
+  .route("/add-feedback-and-update")
+  .post(checkUserLoggedIn, feedbackController.addFeedbackAndUpdateTheSame);
+router
   .route("/add-favorite")
   .post(checkUserLoggedIn, favoriteController.addFavorite)
   .get(checkUserLoggedIn, favoriteController.getFavorite);
