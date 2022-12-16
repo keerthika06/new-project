@@ -62,8 +62,12 @@ const register = async (req, res) => {
           process.env.REFRESH_TOKEN_SECRET,
           { expiresIn: "1d" }
         );
-        await User.findOneAndUpdate({ _id: result._id }, { refreshToken });
-        console.log("refresh", refreshToken, result._id);
+        console.log("refresh", refreshToken);
+        await User.findOneAndUpdate(
+          { _id: result._id },
+          { refreshToken: refreshToken }
+        );
+        console.log("refresh", refreshToken);
         res.header("Refresh-Token", refreshToken);
         res.header("Authorization", "Bearer " + accessToken);
         res.status(200).json({
