@@ -57,6 +57,8 @@ const register = async (req, res) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "1h" }
         );
+
+        
         const refreshToken = jwt.sign(
           { userId: result._id, email: result.email },
           process.env.REFRESH_TOKEN_SECRET,
@@ -110,7 +112,7 @@ const login = async (req, res) => {
 
           if (result == true) {
             const accessToken = jwt.sign(
-              { userId: docs, email: docs.email },
+              { userId: docs._id, email: docs.email },
               process.env.ACCESS_TOKEN_SECRET,
               { expiresIn: "6h" }
             );

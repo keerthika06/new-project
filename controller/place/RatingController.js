@@ -43,8 +43,8 @@ const addRating = async (req, res) => {
     const { placeId, rating } = req.body;
     const { userId } = req.users;
 
-    if (rating < 0 || rating > 10) {
-      return res.json({ message: "Please select rating between 0 to 10" });
+    if (rating < 0 || rating > 5) {
+      return res.json({ message: "Please select rating between 0 to 5" });
     }
 
     let ratee = await calculateRating(rating, placeId);

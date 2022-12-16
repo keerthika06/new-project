@@ -82,7 +82,7 @@ const addPlace = async (req, res) => {
 
 const getParticularPlace = async (req, res) => {
   try {
-    const { placeId } = req.body;
+    const { placeId, latitude, longitude } = req.body;
     const { userId } = req.users;
     console.log(req.users);
     // if (!mongoose.isValidObjectId(placeId))
@@ -102,19 +102,36 @@ const getParticularPlace = async (req, res) => {
         message: "Place does not exist",
       });
 
+    const filter = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          key: "location",
+          maxDistance: parseInt(100) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          "dist.calculated": 1,
+        },
+      },
+    ]);
+
     const user = await User.findOne({ _id: userId }).select("rating ");
     console.log(userId);
-    // const photos = await Place.findOne({})
-
-    // const rating =
-    // const photos=
-    // const review =
 
     const data = {
       placeDetails: place,
+      distanceField: filter,
       //rating: user.rating,
     };
-    //console.log("ratinggg", user.rating);
+
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -136,7 +153,7 @@ const nearMe = async (req, res) => {
         $geoNear: {
           near: {
             type: "Point",
-            coordinates: [x, y],
+            coordinates: [y, x],
           },
           key: "location",
           maxDistance: parseInt(100) * 1609,
@@ -202,6 +219,7 @@ const getPopular = async (req, res) => {
         "placeName placePic description photos review overview rating address phone location"
       )
       .sort([["viewCount", -1]]);
+
     if (allPlaces) {
       return res.status(200).json({
         status: true,
