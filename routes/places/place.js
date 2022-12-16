@@ -22,6 +22,9 @@ router
   .route("/review")
   .post(verifyJWT, upload.single("image"), ReviewController.addReview)
   .get(ReviewController.getReview);
+  router
+  .route("/add-review-only-once")
+  .post(verifyJWT, upload.single("image"), ReviewController.addReviewOnlyOnce)
 router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
 
 router.route("/find-filter").get(FilterController.findFilter);

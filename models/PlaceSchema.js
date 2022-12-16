@@ -57,16 +57,18 @@ const PlaceSchema = new mongoose.Schema({
       },
       reviewText: { type: String, required: true },
       date: { type: Date, required: true },
-      reviewPic: {
-        public_id: {
-          type: String,
-          // required: true,
+      reviewPic: [
+        {
+          public_id: {
+            type: String,
+            // required: true,
+          },
+          url: {
+            type: String,
+            //required: true,
+          },
         },
-        url: {
-          type: String,
-          //required: true,
-        },
-      },
+      ],
     },
   ],
   category: {
