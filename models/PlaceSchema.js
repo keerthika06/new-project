@@ -16,7 +16,16 @@ const PlaceSchema = new mongoose.Schema({
       //required: true,
     },
   },
-  rating: { type: Number, default: 0 },
+  rating: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "UserModel" },
+      // rate: {
+      //   type: Number,
+      //   default: 0,
+      // },
+    },
+  ],
+  overallRating: { type: Number, default: 0 },
   countRating: { type: Number, default: 0 },
 
   //  enum: [0, 1, 2, 3, 4, 5], default: 0 },
@@ -35,10 +44,7 @@ const PlaceSchema = new mongoose.Schema({
           type: String,
           // required: true,
         },
-        url: {
-          type: String,
-          //required: true,
-        },
+        url: [],
       },
 
       dates: { type: Date },
@@ -59,14 +65,11 @@ const PlaceSchema = new mongoose.Schema({
       date: { type: Date, required: true },
       reviewPic: [
         {
-          public_id: {
-            type: String,
-            // required: true,
-          },
-          url: {
-            type: String,
-            //required: true,
-          },
+          // public_id: {
+          //   type: String,
+          //   // required: true,
+          // },
+          url: [],
         },
       ],
     },

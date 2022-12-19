@@ -42,6 +42,114 @@ const addReview = async (req, res) => {
   }
 };
 
+const addReviewByMultipleImages = async (req, res) => {
+  try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    const { userId } = req.users;
+    const { placeId, reviewText } = req.body;
+    // console.log("yyyyyyyyyy", req.files);
+    const reviewPic = req.files;
+    const userfound = await Place.find({
+      $and: [{ "review.userId": userId }, { _id: placeId }],
+    });
+    console.log("unhj", userfound);
+    if (userfound.length == "") {
+      const user = await User.findById({ _id: userId });
+      let obj;
+      const urls = [];
+      if (reviewPic) {
+        const files = req.files;
+        const cloudinaryImageUpload = async (file) => {
+          return new Promise((resolve) => {
+            cloudinary.uploader.upload(file, (err, res) => {
+              if (err) return res.status(500).send("upload image error");
+              resolve({
+                res: res.secure_url,
+              });
+            });
+          });
+        };
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await cloudinaryImageUpload(path, {
+            folder: "image",
+          });
+          urls.push(newPath);
+        }
+        const user = await User.findById({ _id: userId });
+        obj = {
+          //placeId,
+          userId,
+          reviewPic: {
+            url: urls.map((url) => url.res),
+          },
+
+          reviewText,
+          date: Date.now(),
+        };
+      } else {
+        obj = {
+          userId,
+          reviewText,
+          date: Date.now,
+        };
+      }
+      console.log("user", user, obj);
+      // const t = await obj.save();
+      const result = await Place.findByIdAndUpdate(
+        { _id: placeId },
+        // {_id:userId},
+        { $push: { review: obj } },
+        { new: true }
+      );
+      console.log("AAA", result);
+      const data = await Place.findByIdAndUpdate(
+        { _id: placeId },
+        {
+          $push: {
+            photos: {
+              picture: {
+                url: urls.map((url) => url.res),
+              },
+
+              dates: Date.now(),
+            },
+          },
+        },
+
+        { new: true }
+      );
+      console.log("BBB", data);
+      if (data) {
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "Review added",
+        });
+      } else {
+        res.status(400).json({
+          status: true,
+          statusCode: 200,
+          message: "Failed to add review",
+        });
+      }
+    }
+    else{
+      res.status(400).json({
+        status: true,
+        statusCode: 200,
+        message: "This User has already reviewed this place",
+      })
+
+    }
+  } catch (error) {
+    console.log("Error, couldn't add ground", error);
+    internalServerError(res, error);
+  }
+};
 
 const addReviewOnlyOnce = async (req, res) => {
   try {
@@ -222,4 +330,5 @@ module.exports = {
   getReview,
   getReviewPhotos,
   getParticularReviewPhoto,
+  addReviewByMultipleImages,
 };

@@ -84,22 +84,7 @@ const findFilter = async (req, res) => {
     // let coords = [];
     // coords[0] = longitude;
     // coords[1] = latitude;
-    console.log({
-      latitude,
-      longitude,
-      radius,
-      stars,
-      acceptsCreditCard,
-      delivery,
-      dogFriendly,
-      familyFriendly,
-      inWalkingDistance,
-      outdoorSeating,
-      parking,
-      wifi,
-      sortBy,
-      text,
-    });
+    
     const filter = await Place.aggregate([
       {
         $geoNear: {

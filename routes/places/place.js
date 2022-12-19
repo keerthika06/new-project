@@ -22,10 +22,13 @@ router
   .route("/review")
   .post(verifyJWT, upload.single("image"), ReviewController.addReview)
   .get(ReviewController.getReview);
-  router
+router
   .route("/add-review-only-once")
-  .post(verifyJWT, upload.single("image"), ReviewController.addReviewOnlyOnce)
+  .post(verifyJWT, upload.single("image"), ReviewController.addReviewOnlyOnce);
 router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
+router
+  .route("/addReviewByMultipleImages")
+  .post(verifyJWT,upload.array("image"),ReviewController.addReviewByMultipleImages);
 
 router.route("/find-filter").get(FilterController.findFilter);
 
@@ -38,5 +41,9 @@ router
   .route("/photo")
   .post(verifyJWT, upload.single("image"), PhotoController.addPhoto)
   .get(PhotoController.getPhoto);
+
+router
+  .route("/upload-Multiple-Photos")
+  .post(verifyJWT, upload.array("image"), PhotoController.uploadMultiplePhotos);
 
 module.exports = router;
