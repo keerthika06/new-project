@@ -10,6 +10,23 @@ dubai--->25.2048° N, 55.2708
 assam--->26.2006° N, 92.9376
 goa----->15.2993° N, 74.1240
 Resturant", "Shopping", "Attraction", "Services
+kankanady----->12.8674° N, 74.8579
+sagara ----->14.1670 N, 75.0403
+tirupathi----->13.6288 N, 13.6288
+krishna mutt----->13.3432 N, 74.75355
+mantralaya ----->15.9414 N, 77.4257
+chitradurga----->14.2251 N, 76.3980
+robosoft----->15.2993° N, 74.1240
+surathkal ----->12.7687 N, 74.8094
+puttur----->15.2993° N, 75.2071
+bangalore----->12.9716 N, 77.5946
+
+
+
+
+
+
+Resturant", "Shopping", "Attraction", "Services
 
 
 

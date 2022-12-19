@@ -40,7 +40,7 @@ const findFilter = async (req, res) => {
     console.log("1", matchlength);
     if (matchlength) {
       match = {
-        $or: [
+        $and: [
           {
             acceptsCreditCard: acceptsCreditCard,
           },
@@ -62,9 +62,9 @@ const findFilter = async (req, res) => {
           {
             parking: parking,
           },
-          {
-            wifi: wifi,
-          },
+          //   {
+          //     wifi: wifi,
+          //   },
         ],
       };
     } else {
@@ -79,12 +79,13 @@ const findFilter = async (req, res) => {
         ],
       };
     }
-    console.log("2", match);
-
+    console.log("2", radius, match);
+    match = JSON.parse(JSON.stringify(match));
+    console.log(match);
     // let coords = [];
     // coords[0] = longitude;
     // coords[1] = latitude;
-    
+
     const filter = await Place.aggregate([
       {
         $geoNear: {
@@ -98,9 +99,9 @@ const findFilter = async (req, res) => {
           spherical: true,
         },
       },
-      {
-        $match: { $and: [{ stars: { $lt: stars } }] },
-      },
+      // {
+      // $match: { $and: [{ stars: { $lt: stars } }] },
+      // },
       {
         $match: match,
       },

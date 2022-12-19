@@ -10,8 +10,9 @@ const addaboutUs = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     // const { aboutUs } = req.body;
-    //const aboutus = await AboutUs.create({ about: req.body });
+    //const aboutus = await AboutUs.create({ about: req.body.about });
     const aboutus = await AboutUs.findOneAndUpdate({ about: req.body.about });
+    console.log(req.body.about);
     console.log(aboutus);
     //const result = await aboutus.save();
 
