@@ -12,7 +12,7 @@ const verifyJWT = require("../../middleware/verifyJWT");
 router
   .route("/")
   .post(verifyJWT, upload.single("image"), PlaceController.addPlace)
-  .get(verifyJWT, PlaceController.getParticularPlace);
+  .get(PlaceController.getParticularPlace);
 router.route("/near-me").get(PlaceController.nearMe);
 router.route("/search-place").get(PlaceController.searchPlace);
 router.route("/get-all-places").get(PlaceController.getAllPlace);
@@ -28,7 +28,11 @@ router
 router.route("/get-review-photos").get(ReviewController.getReviewPhotos);
 router
   .route("/addReviewByMultipleImages")
-  .post(verifyJWT,upload.array("image"),ReviewController.addReviewByMultipleImages);
+  .post(
+    verifyJWT,
+    upload.array("image"),
+    ReviewController.addReviewByMultipleImages
+  );
 
 router.route("/find-filter").get(FilterController.findFilter);
 

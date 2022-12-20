@@ -83,7 +83,7 @@ const addPlace = async (req, res) => {
 const getParticularPlace = async (req, res) => {
   try {
     const { placeId, latitude, longitude } = req.body;
-    const { userId } = req.users;
+    // const { userId } = req.users;
     //console.log(req.users);
     // if (!mongoose.isValidObjectId(placeId))
     //   return res
@@ -244,25 +244,76 @@ const searchPlace = async (req, res) => {
 };
 const getPopular = async (req, res) => {
   try {
+
+    let x = parseFloat(req.body.latitude);
+    let y = parseFloat(req.body.longitude);
+
+    const popularPlaces = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          photos: 1,
+          review: 1,
+          overview: 1,
+          rating: 1,
+          address: 1,
+          phone: 1,
+          latitude: 1,
+          longitude: 1,
+          rating: 1,
+          viewCount:1
+        },
+      },
+    ]).sort("-viewCount");;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const allPlaces = await Place.find({})
       .select(
         "placeName placePic description photos review overview rating address phone location"
       )
-      .sort([["viewCount", -1]]);
+      
 
-    if (allPlaces) {
+    if (popularPlaces) {
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "Places fetched",
-        data: allPlaces,
+        data: popularPlaces,
       });
     } else {
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "No Place is found",
-        data: allPlaces,
+        data: popularPlaces,
       });
     }
   } catch (error) {
