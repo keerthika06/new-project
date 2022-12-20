@@ -296,13 +296,13 @@ const getParticularReviewPhoto = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     //const { placeId } = req.body;
-    const { reviewPicId } = req.body;
+    const { reviewPicId } = req.query;
     const place = await Place.findOne(
-      { review: { $elemMatch: { _id: reviewPicId } } },
-      { "review.$": 1 }
+      { photos: { $elemMatch: { _id: reviewPicId } } },
+      { "photos.$": 1 }
     )
-      .select("reviewPic date")
-      .populate("review.userId", "name profilePic");
+      // .select("reviewPic date")
+       .populate("review.userId", "name profilePic");
     if (!place)
       return res.status(401).json({
         status: false,
