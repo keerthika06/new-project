@@ -84,7 +84,7 @@ const getParticularPlace = async (req, res) => {
   try {
     const { placeId, latitude, longitude } = req.body;
     const { userId } = req.users;
-    console.log(req.users);
+    //console.log(req.users);
     // if (!mongoose.isValidObjectId(placeId))
     //   return res
     //     .status(400)
@@ -102,34 +102,47 @@ const getParticularPlace = async (req, res) => {
         message: "Place does not exist",
       });
 
-    const filter = await Place.aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: "Point",
-            coordinates: [parseFloat(longitude), parseFloat(latitude)],
-          },
-          key: "location",
-          maxDistance: parseInt(100) * 1609,
-          distanceField: "dist.calculated",
-          spherical: true,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          "dist.calculated": 1,
-        },
-      },
-    ]);
+    // const filter = await Place.aggregate([
+    //   {
+    //     $geoNear: {
+    //       near: {
+    //         type: "Point",
+    //         coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    //       },
+    //       key: "location",
+    //       maxDistance: parseInt(100) * 1609,
+    //       distanceField: "dist.calculated",
+    //       spherical: true,
+    //     },
+    //   },
+    //   { $match: { _id: placeId } },
+    //   {
+    //     $project: {
+    //       _id: 1,
+    //       "dist.calculated": 1,
+    //       placeName: 1,
+    //       placePic: 1,
+    //       description: 1,
+    //       photos: 1,
+    //       review: 1,
+    //       overview: 1,
+    //       rating: 1,
+    //       address: 1,
+    //       phone: 1,
+    //       latitude: 1,
+    //       longitude: 1,
+    //       rating: 1,
+    //     },
+    //   },
+    // ]);
 
-    const user = await User.findOne({ _id: userId }).select("rating ");
-    console.log(userId);
+    const user = await Place.findOne({ _id: placeId }).select("overallRating ");
+    //console.log(userId);
 
     const data = {
       placeDetails: place,
-      distanceField: filter,
-      //rating: user.rating,
+      //distanceField: filter,
+      overallRating: user.overallRating,
     };
 
     res.status(200).json({
@@ -161,10 +174,27 @@ const nearMe = async (req, res) => {
           spherical: true,
         },
       },
+      {
+        $project: {
+          _id: 0,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          photos: 1,
+          review: 1,
+          overview: 1,
+          rating: 1,
+          address: 1,
+          phone: 1,
+          latitude: 1,
+          longitude: 1,
+          rating: 1,
+        },
+      },
     ]);
 
     console.log(nearPlaces);
-
     res.status(200).json({
       status: true,
       statusCode: 200,

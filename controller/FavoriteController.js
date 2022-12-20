@@ -117,6 +117,9 @@ const getFavorite = async (req, res) => {
           {
             address: { $regex: searchParam, $options: "i" },
           },
+          {
+            category: { $regex: searchParam, $options: "i" },
+          },
         ],
       }).select("placeName placePic description rating stars address");
 
