@@ -336,6 +336,7 @@ const getTopPicks = async (req, res) => {
           review: 1,
           overview: 1,
           rating: 1,
+          overallRating:1,
           address: 1,
           phone: 1,
           latitude: 1,
