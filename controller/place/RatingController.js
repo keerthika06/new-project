@@ -149,7 +149,7 @@ const addRating = async (req, res) => {
         placeId,
         { overallRating: new_rating },
         { new: true }
-      );
+      ).select("overallRating");
 
       res.status(200).json({
         status: true,
