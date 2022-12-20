@@ -34,7 +34,7 @@ router
     ReviewController.addReviewByMultipleImages
   );
 
-router.route("/find-filter").get(FilterController.findFilter);
+router.route("/find-filter").post(FilterController.findFilter);
 
 router
   .route("/get-Particular-Review-Photo")

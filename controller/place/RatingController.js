@@ -84,6 +84,7 @@ const { default: mongoose } = require("mongoose");
 
 const addRating = async (req, res) => {
   try {
+    console.log("hii");
     // countRating++
     if (!req.body)
       return res
@@ -95,16 +96,30 @@ const addRating = async (req, res) => {
     if (overallRating < 0 || overallRating > 5) {
       return res.json({ message: "Please select rating between 0 to 5" });
     }
-
-    const userfound = await Place.find({
-      $and: [{ "rating.userId": userId }, { _id: placeId }],
+    console.log(userId);
+    const userfound = await Place.findOne({
+      $and: [
+        {
+          "rating.userId": userId,
+        },
+        {
+          _id: placeId,
+        },
+      ],
     });
     console.log("aaaaaaaaaa", userfound);
-    if (userfound.length == "") {
+    if (userfound == null || userfound.length < 1) {
+      console.log("hii");
       await Place.findByIdAndUpdate(
         placeId,
 
-        { $push: { "rating.userId": userId } },
+        {
+          $push: {
+            rating: {
+              userId: userId,
+            },
+          },
+        },
 
         { new: true }
       );

@@ -262,15 +262,15 @@ const getReview = async (req, res) => {
 
 const getReviewPhotos = async (req, res) => {
   try {
-    if (!req.body)
+    if (!req.query)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId } = req.body;
+    const { placeId } = req.query;
     const reviewPicture = await Place.findOne({ _id: placeId }).select(
       "review.reviewPic"
     );
-    console.log("hiiiiiiiiiiiiii", reviewPicture);
+    //console.log("hiiiiiiiiiiiiii", reviewPicture);
     if (!reviewPicture)
       return res.status(401).json({
         status: false,
