@@ -136,14 +136,12 @@ const addReviewByMultipleImages = async (req, res) => {
           message: "Failed to add review",
         });
       }
-    }
-    else{
+    } else {
       res.status(400).json({
         status: true,
         statusCode: 200,
         message: "This User has already reviewed this place",
-      })
-
+      });
     }
   } catch (error) {
     console.log("Error, couldn't add ground", error);
@@ -237,9 +235,9 @@ const getReview = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId } = req.body;
+    const { placeId } = req.query;
     const review = await Place.findOne({ _id: placeId })
-      .select("review.reviewText review.date")
+      .select("review.reviewText review.reviewPic review.date")
       .populate("review.userId", "name profilePic");
 
     console.log("hiiiiiiiiiiiiii", review);

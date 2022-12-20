@@ -82,7 +82,7 @@ const addPlace = async (req, res) => {
 
 const getParticularPlace = async (req, res) => {
   try {
-    const { placeId, latitude, longitude } = req.body;
+    const { placeId, latitude, longitude } = req.query;
     // const { userId } = req.users;
     //console.log(req.users);
     // if (!mongoose.isValidObjectId(placeId))
@@ -158,8 +158,8 @@ const getParticularPlace = async (req, res) => {
 };
 const nearMe = async (req, res) => {
   try {
-    let x = parseFloat(req.body.latitude);
-    let y = parseFloat(req.body.longitude);
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
 
     const nearPlaces = await Place.aggregate([
       {
@@ -244,8 +244,8 @@ const searchPlace = async (req, res) => {
 };
 const getPopular = async (req, res) => {
   try {
-    let x = parseFloat(req.body.latitude);
-    let y = parseFloat(req.body.longitude);
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
 
     const popularPlaces = await Place.aggregate([
       {
@@ -309,8 +309,8 @@ const getPopular = async (req, res) => {
 
 const getTopPicks = async (req, res) => {
   try {
-    let x = parseFloat(req.body.latitude);
-    let y = parseFloat(req.body.longitude);
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
 
     const topPlaces = await Place.aggregate([
       {
@@ -336,7 +336,7 @@ const getTopPicks = async (req, res) => {
           review: 1,
           overview: 1,
           rating: 1,
-          overallRating:1,
+          overallRating: 1,
           address: 1,
           phone: 1,
           latitude: 1,
