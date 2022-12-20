@@ -244,7 +244,6 @@ const searchPlace = async (req, res) => {
 };
 const getPopular = async (req, res) => {
   try {
-
     let x = parseFloat(req.body.latitude);
     let y = parseFloat(req.body.longitude);
 
@@ -277,29 +276,15 @@ const getPopular = async (req, res) => {
           latitude: 1,
           longitude: 1,
           rating: 1,
-          viewCount:1
+          viewCount: 1,
         },
       },
-    ]).sort("-viewCount");;
+    ]).sort("-viewCount");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    const allPlaces = await Place.find({})
-      .select(
-        "placeName placePic description photos review overview rating address phone location"
-      )
-      
+    // const allPlaces = await Place.find({})
+    //   .select(
+    //     "placeName placePic description photos review overview rating address phone location"
+    //   )
 
     if (popularPlaces) {
       return res.status(200).json({
@@ -324,24 +309,61 @@ const getPopular = async (req, res) => {
 
 const getTopPicks = async (req, res) => {
   try {
-    const allPlaces = await Place.find({})
-      .select(
-        "placeName placePic description photos review overview rating address phone location"
-      )
-      .sort([["rating", -1]]);
-    if (allPlaces) {
+    let x = parseFloat(req.body.latitude);
+    let y = parseFloat(req.body.longitude);
+
+    const topPlaces = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          photos: 1,
+          review: 1,
+          overview: 1,
+          rating: 1,
+          address: 1,
+          phone: 1,
+          latitude: 1,
+          longitude: 1,
+          rating: 1,
+          viewCount: 1,
+        },
+      },
+    ]).sort("-overallRating");
+
+    // const allPlaces = await Place.find({})
+    //   .select(
+    //     "placeName placePic description photos review overview rating address phone location"
+    //   )
+    //   .sort([["rating", -1]]);
+    if (topPlaces) {
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "Places fetched",
-        data: allPlaces,
+        data: topPlaces,
       });
     } else {
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "No Place is found",
-        data: allPlaces,
+        data: topPlaces,
       });
     }
   } catch (error) {
