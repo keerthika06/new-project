@@ -231,7 +231,7 @@ const addReviewOnlyOnce = async (req, res) => {
 
 const getReview = async (req, res) => {
   try {
-    if (!req.body)
+    if (!req.query)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
