@@ -266,7 +266,7 @@ const getPopular = async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           "dist.calculated": 1,
           placeName: 1,
           placePic: 1,
@@ -324,7 +324,7 @@ const getTopPicks = async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           "dist.calculated": 1,
           placeName: 1,
           placePic: 1,
