@@ -386,6 +386,101 @@ const getAllPlace = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const updatePlace = async (req, res) => {
+  try {
+    let {
+      placeId,
+      placeName,
+      description,
+      overview,
+      address,
+      phone,
+      category,
+      location,
+      acceptsCreditCard,
+      delivery,
+      dogFriendly,
+      familyFriendly,
+      inWalkingDistance,
+      outdoorSeating,
+      parking,
+      wifi,
+    } = req.body;
+    // location.coordinates = location.coordinates
+    location.type = "Point";
+
+    let placePic = {};
+    cloudinaryResult = {};
+    console.log("aaa");
+    if (req.file) {
+      placePic = req.file.path;
+      cloudinaryResult = await cloudinary.uploader.upload(placePic, {
+        folder: "image",
+      });
+      console.log("aaa");
+
+      placePic = {
+        public_id: cloudinaryResult.public_id,
+        url: cloudinaryResult.secure_url,
+      };
+    } else {
+      let usersProfilePic = await Place.findOne({
+        _id: placeId,
+      }).select("placePic");
+      placePic = {
+        public_id: usersProfilePic.placePic.public_id,
+        url: usersProfilePic.placePic.url,
+      };
+    }
+    console.log("aaa");
+
+    updatedData = {
+      placeName: placeName,
+      description: description,
+      overview: overview,
+      address: address,
+      phone: phone,
+      category: category,
+      location: location,
+      acceptsCreditCard: acceptsCreditCard,
+      delivery: delivery,
+      dogFriendly: dogFriendly,
+      familyFriendly: familyFriendly,
+      inWalkingDistance: inWalkingDistance,
+      outdoorSeating: outdoorSeating,
+      parking: parking,
+      wifi: wifi,
+      placePic: placePic,
+    };
+    console.log("updatedData", updatedData);
+    updatedData = JSON.parse(JSON.stringify(updatedData));
+    console.log("updatedData2", updatedData);
+
+    const place = await Place.findOneAndUpdate(
+      {
+        _id: placeId,
+      },
+       updatedData ,
+      { new: true }
+    ); //.select("placeName description overview address phone category location acceptsCreditCard delivery dogFriendly familyFriendly inWalkingDistance outdoorSeating parking wifi");
+    console.log("place", place);
+    if (place)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Place updated successfully",
+        data: place,
+      });
+    res.status(404).json({
+      status: false,
+      statusCode: 400,
+      message: "Error occured",
+    });
+  } catch (error) {
+    console.log("Error from search place", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   addPlace,
@@ -395,5 +490,7 @@ module.exports = {
   getPopular,
   getAllPlace,
   getTopPicks,
+  updatePlace,
+
   // 8fe1a3b448d7df1eeaecbe25d62e0a59826d6bd6
 };

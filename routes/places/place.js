@@ -12,7 +12,8 @@ const verifyJWT = require("../../middleware/verifyJWT");
 router
   .route("/")
   .post(verifyJWT, upload.single("image"), PlaceController.addPlace)
-  .get(PlaceController.getParticularPlace);
+  .get(PlaceController.getParticularPlace)
+  .put(verifyJWT, upload.single("image"), PlaceController.updatePlace);
 router.route("/near-me").get(PlaceController.nearMe);
 router.route("/search-place").get(PlaceController.searchPlace);
 router.route("/get-all-places").get(PlaceController.getAllPlace);
