@@ -18,7 +18,7 @@ const addFavorite = async (req, res) => {
     const [ifFavorite] = await User.find({
       "favorite.placeId": placeId,
     });
-    //console.log("ZOZOZOOOO", ifFavorite);
+    console.log("ZOZOZOOOO", ifFavorite);
     const placedetail = await Place.findOne({ placeId }).select(
       "placeName placePic description rating placeLatLong"
     );
@@ -28,7 +28,7 @@ const addFavorite = async (req, res) => {
       const result = await User.findByIdAndUpdate(
         userId,
 
-        { $push: { favorite: { placeId } } },
+        { $push: { favorite: { placeId: placeId } } },
 
         { new: true }
       );
@@ -42,7 +42,7 @@ const addFavorite = async (req, res) => {
       const result = await User.findByIdAndUpdate(
         userId,
 
-        { $pull: { favorite: { placeId } } },
+        { $pull: { favorite: { placeId: placeId } } },
 
         { new: true }
       );

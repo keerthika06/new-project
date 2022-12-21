@@ -176,8 +176,9 @@ const nearMe = async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           "dist.calculated": 1,
+
           placeName: 1,
           placePic: 1,
           description: 1,
@@ -328,8 +329,8 @@ const getTopPicks = async (req, res) => {
           placeName: 1,
           placePic: 1,
           description: 1,
-          stars:1,
-          overallRating:1,
+          stars: 1,
+          overallRating: 1,
           address: 1,
         },
       },

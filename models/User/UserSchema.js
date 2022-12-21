@@ -21,8 +21,8 @@ const UserSchema = new mongoose.Schema({
   },
   favorite: [
     {
-      placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
-      // placeId: { type: String },
+      //placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
+       placeId: { type: String },
       //{ type: Boolean, default: false },
     },
   ],
