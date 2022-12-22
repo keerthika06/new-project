@@ -15,8 +15,8 @@ const addFavorite = async (req, res) => {
     const { userId } = req.users;
     //console.log("Userrrr", userId);
 
-    const [ifFavorite] = await User.find({
-      "favorite.placeId": placeId,
+    const ifFavorite= await User.findOne({
+      $and:[{"favorite.placeId": placeId},{_id:userId}]
     });
     console.log("ZOZOZOOOO", ifFavorite);
     const placedetail = await Place.findOne({ placeId }).select(
