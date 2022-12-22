@@ -90,7 +90,7 @@ const getParticularPlace = async (req, res) => {
     //     .status(400)
     //     .json({ status: false, statusCode: 400, message: "Id not valid" });
     const place = await Place.findOne({ _id: placeId }).select(
-      "placeName placePic description photos review overview rating address phone latitude longitude"
+      "placeName placePic description photos review overview rating address phone location"
     );
     //place.viewCount++;
     await Place.updateOne({ _id: placeId }, { $inc: { viewCount: 1 } }).exec();

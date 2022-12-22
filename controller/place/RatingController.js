@@ -86,11 +86,11 @@ const addRating = async (req, res) => {
   try {
     console.log("hii");
     // countRating++
-    if (!req.body)
+    if (!req.query)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId, overallRating } = req.body;
+    const { placeId, overallRating } = req.query;
     const { userId } = req.users;
 
     if (overallRating < 0 || overallRating > 5) {

@@ -13,6 +13,7 @@ const userRouter = require("./routes/users/user");
 const otpRouter = require("./routes/users/otp");
 const placeRouter = require("./routes/places/place");
 const adminRouter = require("./routes/admin/aboutus");
+// const nearCityRouter = require("./routes/admin/nearCity")
 //const feedbackRouter = require("./routes/users/user")
 
 const app = express();
