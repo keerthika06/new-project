@@ -51,4 +51,8 @@ router
   .route("/upload-Multiple-Photos")
   .post(verifyJWT, upload.array("image"), PhotoController.uploadMultiplePhotos);
 
+router.route("/get-resturant").get(PlaceController.getResturants);
+router.route("/get-shopping").get(PlaceController.getShopping);
+router.route("/get-attraction").get(PlaceController.getAttraction);
+router.route("/get-services").get(PlaceController.getServices);
 module.exports = router;

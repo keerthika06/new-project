@@ -460,7 +460,7 @@ const updatePlace = async (req, res) => {
       {
         _id: placeId,
       },
-       updatedData ,
+      updatedData,
       { new: true }
     ); //.select("placeName description overview address phone category location acceptsCreditCard delivery dogFriendly familyFriendly inWalkingDistance outdoorSeating parking wifi");
     console.log("place", place);
@@ -481,6 +481,249 @@ const updatePlace = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const getResturants = async (req, res) => {
+  try {
+    if (!req.query)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
+
+    const resturant = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $match: { category: "Resturant" },
+      },
+      {
+        $project: {
+          _id: 1,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          stars: 1,
+          overallRating: 1,
+          address: 1,
+        },
+      },
+    ]);
+
+    // const resturant = await Place.find({ category: "Resturant" }).select(
+    //   "placeName placePic description photos review overview rating address phone latitude longitude"
+    // );
+    if (!resturant)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No resturant is added.",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Resturant fetched",
+      data: resturant,
+    });
+  } catch (error) {
+    console.log("Error from get resturant", error);
+    internalServerError(res, error);
+  }
+};
+
+const getShopping = async (req, res) => {
+  try {
+    if (!req.query)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
+
+    const resturant = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $match: { category: "Shopping" },
+      },
+      {
+        $project: {
+          _id: 1,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          stars: 1,
+          overallRating: 1,
+          address: 1,
+        },
+      },
+    ]);
+
+    // const resturant = await Place.find({ category: "Resturant" }).select(
+    //   "placeName placePic description photos review overview rating address phone latitude longitude"
+    // );
+    if (!resturant)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No Shopping is added.",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Shopping fetched",
+      data: resturant,
+    });
+  } catch (error) {
+    console.log("Error from get Shopping", error);
+    internalServerError(res, error);
+  }
+};
+
+const getAttraction = async (req, res) => {
+  try {
+    if (!req.query)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
+
+    const resturant = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $match: { category: "Attraction" },
+      },
+      {
+        $project: {
+          _id: 1,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          stars: 1,
+          overallRating: 1,
+          address: 1,
+        },
+      },
+    ]);
+
+    // const resturant = await Place.find({ category: "Resturant" }).select(
+    //   "placeName placePic description photos review overview rating address phone latitude longitude"
+    // );
+    if (!resturant)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No Attraction is added.",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Attraction fetched",
+      data: resturant,
+    });
+  } catch (error) {
+    console.log("Error from get Attraction", error);
+    internalServerError(res, error);
+  }
+};
+
+const getServices = async (req, res) => {
+  try {
+    if (!req.query)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
+
+    const resturant = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $match: { category: "Services" },
+      },
+      {
+        $project: {
+          _id: 1,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          stars: 1,
+          overallRating: 1,
+          address: 1,
+        },
+      },
+    ]);
+
+    // const resturant = await Place.find({ category: "Resturant" }).select(
+    //   "placeName placePic description photos review overview rating address phone latitude longitude"
+    // );
+    if (!resturant)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No service is added.",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Services fetched",
+      data: resturant,
+    });
+  } catch (error) {
+    console.log("Error from get service", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   addPlace,
@@ -491,6 +734,10 @@ module.exports = {
   getAllPlace,
   getTopPicks,
   updatePlace,
+  getResturants,
+  getShopping,
+  getAttraction,
+  getServices,
 
   // 8fe1a3b448d7df1eeaecbe25d62e0a59826d6bd6
 };
