@@ -33,7 +33,7 @@ const addPlace = async (req, res) => {
       }
     );
     //const picture = cloudinaryResult.url;
-    // console.log(picture);
+   
     const place = new Place({
       placePic: {
         public_id: cloudinaryResult.public_id,

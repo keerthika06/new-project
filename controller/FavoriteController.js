@@ -13,18 +13,18 @@ const addFavorite = async (req, res) => {
     const { placeId } = req.body;
 
     const { userId } = req.users;
-    //console.log("Userrrr", userId);
+  
 
     const ifFavorite = await User.findOne({
       $and: [{ "favorite.placeId": placeId }, { _id: userId }],
     });
-    console.log("ZOZOZOOOO", ifFavorite);
+    
     const placedetail = await Place.findOne({ placeId }).select(
       "placeName placePic description rating placeLatLong"
     );
 
     if (!ifFavorite) {
-      //console.log("yooooooo");
+      
       const result = await User.findByIdAndUpdate(
         userId,
 
@@ -54,7 +54,7 @@ const addFavorite = async (req, res) => {
         data: result,
       });
     }
-    //console.log("hhhhhhiiiii", ifFavorite);
+   
   } catch (error) {
     console.log("Error, couldn't add favorite", error);
     internalServerError(res, error);

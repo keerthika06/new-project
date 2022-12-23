@@ -52,7 +52,7 @@ const getPhoto = async (req, res) => {
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { placeId } = req.body;
     const photo = await Place.findOne({ _id: placeId }).select("photos");
-    console.log(photo);
+    
     if (photo) {
       result = [];
       for (i = 0; i < photo.photos.length; i++) {
@@ -120,7 +120,7 @@ const uploadMultiplePhotos = async (req, res) => {
         folder: "image",
       });
       urls.push(newPath);
-      console.log(newPath);
+     
     }
     const user = await User.findById({ _id: userId });
     const obj = {

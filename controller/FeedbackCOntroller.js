@@ -12,7 +12,7 @@ const addFeedbackAndUpdateTheSame = async (req, res) => {
         .json({ status: false, statusCode: 400, message: "body is not found" });
 
     const { userId } = req.users;
-    console.log(userId);
+    
 
     const feedbackText = req.body;
 
@@ -38,7 +38,7 @@ const addFeedback = async (req, res) => {
         .json({ status: false, statusCode: 400, message: "body is not found" });
     const { userId } = req.users;
     const { feedbackText } = req.body;
-    console.log("hhhi", feedbackText);
+ 
 
     const result = await User.findByIdAndUpdate(
       { _id: userId },

@@ -55,7 +55,7 @@ const addReviewByMultipleImages = async (req, res) => {
     const userfound = await Place.find({
       $and: [{ "review.userId": userId }, { _id: placeId }],
     });
-    console.log("unhj", userfound);
+    
     if (userfound.length == "") {
       const user = await User.findById({ _id: userId });
       let obj;
@@ -97,7 +97,7 @@ const addReviewByMultipleImages = async (req, res) => {
           date: Date.now,
         };
       }
-      console.log("user", user, obj);
+     
       // const t = await obj.save();
       const result = await Place.findByIdAndUpdate(
         { _id: placeId },
@@ -105,7 +105,7 @@ const addReviewByMultipleImages = async (req, res) => {
         { $push: { review: obj } },
         { new: true }
       );
-      console.log("AAA", result);
+      
       const data = await Place.findByIdAndUpdate(
         { _id: placeId },
         {
@@ -122,7 +122,7 @@ const addReviewByMultipleImages = async (req, res) => {
 
         { new: true }
       );
-      console.log("BBB", data);
+    
       if (data) {
         res.status(200).json({
           status: true,
@@ -164,9 +164,9 @@ const addReviewOnlyOnce = async (req, res) => {
     const userfound = await Place.find({
       $and: [{ "review.userId": userId }, { _id: placeId }],
     });
-    console.log("zzzzzzz", userfound);
+    
     if (userfound.length != "") {
-      console.log("yeeeeeeeessssss");
+      
       const obj = {
         //placeId,
         userId,
@@ -177,8 +177,8 @@ const addReviewOnlyOnce = async (req, res) => {
         reviewText,
         date: Date.now(),
       };
-      console.log("RRRRRRRR", reviewText);
-      console.log(userId);
+      
+      
       const result = await Place.findOneAndUpdate(
         {
           _id: req.body.placeId,
@@ -190,7 +190,7 @@ const addReviewOnlyOnce = async (req, res) => {
         },
         { new: true }
       );
-      console.log("resuklt", result);
+      
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -198,7 +198,7 @@ const addReviewOnlyOnce = async (req, res) => {
         data: result,
       });
     } else {
-      console.log("NNNNNNNOOOOOOOO");
+      
 
       const obj = {
         //placeId,
@@ -240,7 +240,7 @@ const getReview = async (req, res) => {
       .select("review.reviewText review.reviewPic review.date")
       .populate("review.userId", "name profilePic");
 
-    console.log("hiiiiiiiiiiiiii", review);
+    
     if (!review)
       return res.status(401).json({
         status: false,
@@ -297,7 +297,7 @@ const getReviewPhotos = async (req, res) => {
     //   message: "No photos are added to this place.",
     // });
 
-    console.log("hiiiiiiiiiiiiii", reviewPicture);
+    
     if (!reviewPicture)
       return res.status(401).json({
         status: false,

@@ -198,7 +198,7 @@ const nearMe = async (req, res) => {
       },
     ]);
 
-    console.log(nearPlaces);
+   
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -412,13 +412,13 @@ const updatePlace = async (req, res) => {
 
     let placePic = {};
     cloudinaryResult = {};
-    console.log("aaa");
+    
     if (req.file) {
       placePic = req.file.path;
       cloudinaryResult = await cloudinary.uploader.upload(placePic, {
         folder: "image",
       });
-      console.log("aaa");
+    
 
       placePic = {
         public_id: cloudinaryResult.public_id,
@@ -453,9 +453,9 @@ const updatePlace = async (req, res) => {
       wifi: wifi,
       placePic: placePic,
     };
-    console.log("updatedData", updatedData);
+    // console.log("updatedData", updatedData);
     updatedData = JSON.parse(JSON.stringify(updatedData));
-    console.log("updatedData2", updatedData);
+    // console.log("updatedData2", updatedData);
 
     const place = await Place.findOneAndUpdate(
       {
@@ -464,7 +464,7 @@ const updatePlace = async (req, res) => {
       updatedData,
       { new: true }
     ); //.select("placeName description overview address phone category location acceptsCreditCard delivery dogFriendly familyFriendly inWalkingDistance outdoorSeating parking wifi");
-    console.log("place", place);
+    // console.log("place", place);
     if (place)
       return res.status(200).json({
         status: true,
