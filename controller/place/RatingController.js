@@ -86,11 +86,11 @@ const addRating = async (req, res) => {
   try {
     console.log("hii");
     // countRating++
-    if (!req.query)
+    if (!req.body)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    const { placeId, overallRating } = req.query;
+    const { placeId, overallRating } = req.body;
     const { userId } = req.users;
 
     if (overallRating < 0 || overallRating > 5) {
@@ -107,7 +107,7 @@ const addRating = async (req, res) => {
         },
       ],
     });
-    console.log("aaaaaaaaaa", userfound);
+    //console.log("aaaaaaaaaa", userfound);
     if (userfound == null || userfound.length < 1) {
       console.log("hii");
       await Place.findByIdAndUpdate(
@@ -130,13 +130,19 @@ const addRating = async (req, res) => {
         { $inc: { countRating: 1 } },
         { new: true }
       );
-      // console.log("bbbbb", countRatings);
+      console.log("bbbbb", countRatings);
       let countRatingg = countRatings.countRating;
-      //console.log("cccc", countRatingg);
+      console.log("cccc", countRatingg);
       let old_rating = countRatings.overallRating;
-      let new_rating =
-        (old_rating * (countRatingg - 1) + overallRating) / countRatingg;
-      //console.log("uuuuuuuu", new_rating);
+      console.log(old_rating);
+      let sub = countRatingg - 1;
+      console.log("sub", sub);
+      let mul = old_rating * sub;
+      console.log("mul", mul);
+      let add = mul + overallRating;
+      console.log("add", add);
+      let new_rating = add / countRatingg;
+      console.log("uuuuuuuu", new_rating);
       const updatedRating = await Place.findOneAndUpdate(
         {
           _id: placeId,
