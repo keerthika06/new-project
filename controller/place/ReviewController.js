@@ -270,7 +270,34 @@ const getReviewPhotos = async (req, res) => {
     const reviewPicture = await Place.findOne({ _id: placeId }).select(
       "review.reviewPic"
     );
-    //console.log("hiiiiiiiiiiiiii", reviewPicture);
+
+
+    // const reviewPicture = await Place.findOne({ _id: placeId }).select(
+    //   "review"
+    // );
+    // if (reviewPicture) {
+    //   result = [];
+    //   for (i = 0; i < reviewPicture.review.length; i++) {
+    //     if (reviewPicture.review[0].reviewPic.url != 0) {
+    //       result.push(reviewPicture.review[0].reviewPic.url);
+    //     }
+    //   }
+
+    //   return res.status(200).json({
+    //     status: true,
+    //     statusCode: 200,
+    //     message: "Photos fetched",
+    //     data: result,
+    //   });
+    // }
+
+    // return res.status(401).json({
+    //   status: false,
+    //   statusCode: 401,
+    //   message: "No photos are added to this place.",
+    // });
+
+    console.log("hiiiiiiiiiiiiii", reviewPicture);
     if (!reviewPicture)
       return res.status(401).json({
         status: false,
@@ -302,7 +329,7 @@ const getParticularReviewPhoto = async (req, res) => {
       { "photos.$": 1 }
     )
       // .select("reviewPic date")
-       .populate("review.userId", "name profilePic");
+      .populate("review.userId", "name profilePic");
     if (!place)
       return res.status(401).json({
         status: false,
