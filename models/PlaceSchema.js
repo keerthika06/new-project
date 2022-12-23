@@ -39,6 +39,10 @@ const PlaceSchema = new mongoose.Schema({
   phone: { type: String },
   photos: [
     {
+      userId: {
+        type: String,
+      },
+
       picture: {
         public_id: {
           type: String,

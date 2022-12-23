@@ -55,7 +55,7 @@ const addReviewByMultipleImages = async (req, res) => {
     const userfound = await Place.find({
       $and: [{ "review.userId": userId }, { _id: placeId }],
     });
-    
+
     if (userfound.length == "") {
       const user = await User.findById({ _id: userId });
       let obj;
@@ -97,7 +97,7 @@ const addReviewByMultipleImages = async (req, res) => {
           date: Date.now,
         };
       }
-     
+
       // const t = await obj.save();
       const result = await Place.findByIdAndUpdate(
         { _id: placeId },
@@ -105,12 +105,13 @@ const addReviewByMultipleImages = async (req, res) => {
         { $push: { review: obj } },
         { new: true }
       );
-      
+
       const data = await Place.findByIdAndUpdate(
         { _id: placeId },
         {
           $push: {
             photos: {
+              userId: userId,
               picture: {
                 url: urls.map((url) => url.res),
               },
@@ -122,7 +123,7 @@ const addReviewByMultipleImages = async (req, res) => {
 
         { new: true }
       );
-    
+
       if (data) {
         res.status(200).json({
           status: true,
@@ -164,9 +165,8 @@ const addReviewOnlyOnce = async (req, res) => {
     const userfound = await Place.find({
       $and: [{ "review.userId": userId }, { _id: placeId }],
     });
-    
+
     if (userfound.length != "") {
-      
       const obj = {
         //placeId,
         userId,
@@ -177,8 +177,7 @@ const addReviewOnlyOnce = async (req, res) => {
         reviewText,
         date: Date.now(),
       };
-      
-      
+
       const result = await Place.findOneAndUpdate(
         {
           _id: req.body.placeId,
@@ -190,7 +189,7 @@ const addReviewOnlyOnce = async (req, res) => {
         },
         { new: true }
       );
-      
+
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -198,8 +197,6 @@ const addReviewOnlyOnce = async (req, res) => {
         data: result,
       });
     } else {
-      
-
       const obj = {
         //placeId,
         userId,
@@ -240,7 +237,6 @@ const getReview = async (req, res) => {
       .select("review.reviewText review.reviewPic review.date")
       .populate("review.userId", "name profilePic");
 
-    
     if (!review)
       return res.status(401).json({
         status: false,
@@ -271,7 +267,6 @@ const getReviewPhotos = async (req, res) => {
       "review.reviewPic"
     );
 
-
     // const reviewPicture = await Place.findOne({ _id: placeId }).select(
     //   "review"
     // );
@@ -297,7 +292,6 @@ const getReviewPhotos = async (req, res) => {
     //   message: "No photos are added to this place.",
     // });
 
-    
     if (!reviewPicture)
       return res.status(401).json({
         status: false,
@@ -323,13 +317,13 @@ const getParticularReviewPhoto = async (req, res) => {
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
     //const { placeId } = req.body;
-    const { reviewPicId } = req.query;
+    const { photoId } = req.query;
     const place = await Place.findOne(
-      { photos: { $elemMatch: { _id: reviewPicId } } },
+      { photos: { $elemMatch: { _id: photoId } } },
       { "photos.$": 1 }
     )
-      // .select("reviewPic date")
-      .populate("review.userId", "name profilePic");
+      .select("userId date")
+      .populate("userId", "name profilePic");
     if (!place)
       return res.status(401).json({
         status: false,
@@ -340,7 +334,7 @@ const getParticularReviewPhoto = async (req, res) => {
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Review fetched",
+      message: "Photo details fetched fetched",
       data: place,
     });
   } catch (error) {
@@ -349,6 +343,38 @@ const getParticularReviewPhoto = async (req, res) => {
   }
 };
 
+// const getParticularReviewPhoto = async (req, res) => {
+//   try {
+//     if (!req.body)
+//       return res
+//         .status(400)
+//         .json({ status: false, statusCode: 400, message: "body is not found" });
+//     //const { placeId } = req.body;
+//     const { reviewPicId } = req.query;
+//     const place = await Place.findOne(
+//       { photos: { $elemMatch: { _id: reviewPicId } } },
+//       { "photos.$": 1 }
+//     )
+//       // .select("reviewPic date")
+//       .populate("review.userId", "name profilePic");
+//     if (!place)
+//       return res.status(401).json({
+//         status: false,
+//         statusCode: 401,
+//         message: "No photo is added to this review.",
+//       });
+
+//     res.status(200).json({
+//       status: true,
+//       statusCode: 200,
+//       message: "Photo details fetched fetched",
+//       data: place,
+//     });
+//   } catch (error) {
+//     console.log("Error from get photos", error);
+//     internalServerError(res, error);
+//   }
+// };
 module.exports = {
   addReview,
   addReviewOnlyOnce,
