@@ -407,6 +407,7 @@ const updatePlace = async (req, res) => {
       wifi,
     } = req.body;
     // location.coordinates = location.coordinates
+    if(location)
     location.type = "Point";
 
     let placePic = {};
