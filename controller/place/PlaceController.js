@@ -215,14 +215,14 @@ const searchPlace = async (req, res) => {
     const result = await Place.find({
       $or: [
         {
-          placeName: { $regex: req.body.text, $options: "i" },
+          placeName: { $regex: req.query.text, $options: "i" },
         },
-        { description: { $regex: req.body.text, $options: "i" } },
+        { description: { $regex: req.query.text, $options: "i" } },
         {
-          address: { $regex: req.body.text, $options: "i" },
+          address: { $regex: req.query.text, $options: "i" },
         },
         {
-          category: { $regex: req.body.text, $options: "i" },
+          category: { $regex: req.query.text, $options: "i" },
         },
       ],
     }).select("placeName placePic address rating phone");
