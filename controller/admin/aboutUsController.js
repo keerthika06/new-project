@@ -12,7 +12,7 @@ const addaboutUs = async (req, res) => {
     // const { aboutUs } = req.body;
     //const aboutus = await AboutUs.create({ about: req.body.about });
     const aboutus = await AboutUs.findOneAndUpdate({ about: req.body.about });
-   
+
     //const result = await aboutus.save();
 
     res.status(200).json({
@@ -29,7 +29,7 @@ const addaboutUs = async (req, res) => {
 
 const getaboutUs = async (req, res) => {
   try {
-    if (!req.body)
+    if (!req.query)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });

@@ -241,7 +241,7 @@ const getReview = async (req, res) => {
       return res.status(401).json({
         status: false,
         statusCode: 401,
-        message: "No review are added to this place.",
+        message: "No review is added to this place.",
       });
 
     res.status(200).json({
@@ -312,7 +312,7 @@ const getReviewPhotos = async (req, res) => {
 };
 const getParticularReviewPhoto = async (req, res) => {
   try {
-    if (!req.body)
+    if (!req.query)
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
