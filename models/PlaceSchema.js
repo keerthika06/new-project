@@ -80,7 +80,7 @@ const PlaceSchema = new mongoose.Schema({
   ],
   category: {
     type: String,
-    enum: ["Resturant", "Shopping", "Attraction", "Services"],
+    enum: ["Resturant", "Coffee", "Shopping", "Attraction", "Services"],
     required: true,
   },
   location: {

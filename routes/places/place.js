@@ -55,4 +55,6 @@ router.route("/get-resturant").get(PlaceController.getResturants);
 router.route("/get-shopping").get(PlaceController.getShopping);
 router.route("/get-attraction").get(PlaceController.getAttraction);
 router.route("/get-services").get(PlaceController.getServices);
+router.route("/get-coffee").get(PlaceController.getCoffee);
+
 module.exports = router;

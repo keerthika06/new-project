@@ -198,7 +198,6 @@ const nearMe = async (req, res) => {
       },
     ]);
 
-   
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -407,18 +406,16 @@ const updatePlace = async (req, res) => {
       wifi,
     } = req.body;
     // location.coordinates = location.coordinates
-    if(location)
-    location.type = "Point";
+    if (location) location.type = "Point";
 
     let placePic = {};
     cloudinaryResult = {};
-    
+
     if (req.file) {
       placePic = req.file.path;
       cloudinaryResult = await cloudinary.uploader.upload(placePic, {
         folder: "image",
       });
-    
 
       placePic = {
         public_id: cloudinaryResult.public_id,
@@ -529,16 +526,16 @@ const getResturants = async (req, res) => {
       return res.status(401).json({
         status: false,
         statusCode: 401,
-        message: "No resturant is added.",
+        message: "No lunch is added.",
       });
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Resturant fetched",
+      message: "Lunch fetched",
       data: resturant,
     });
   } catch (error) {
-    console.log("Error from get resturant", error);
+    console.log("Error from get lunch", error);
     internalServerError(res, error);
   }
 };
@@ -725,6 +722,66 @@ const getServices = async (req, res) => {
     internalServerError(res, error);
   }
 };
+const getCoffee = async (req, res) => {
+  try {
+    if (!req.query)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
+
+    const coffee = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [y, x],
+          },
+          key: "location",
+          maxDistance: parseInt(10000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+      {
+        $match: { category: "Coffee" },
+      },
+      {
+        $project: {
+          _id: 1,
+          "dist.calculated": 1,
+          placeName: 1,
+          placePic: 1,
+          description: 1,
+          stars: 1,
+          overallRating: 1,
+          address: 1,
+        },
+      },
+    ]);
+
+    // const resturant = await Place.find({ category: "Resturant" }).select(
+    //   "placeName placePic description photos review overview rating address phone latitude longitude"
+    // );
+    if (!coffee)
+      return res.status(401).json({
+        status: false,
+        statusCode: 401,
+        message: "No coffee is added.",
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Coffee's details fetched",
+      data: coffee,
+    });
+  } catch (error) {
+    console.log("Error from get coffee", error);
+    internalServerError(res, error);
+  }
+};
 
 module.exports = {
   addPlace,
@@ -736,6 +793,7 @@ module.exports = {
   getTopPicks,
   updatePlace,
   getResturants,
+  getCoffee,
   getShopping,
   getAttraction,
   getServices,
