@@ -15,7 +15,7 @@ router
   .route("/admin/add-place")
   .post(verifyJWT, upload.single("image"), addPlaceController.addPlace);
 router.route("/get-near-city")
-.get(verifyJWT, upload.single("image"), nearCityController.getNearCity)
+.get(upload.single("image"), nearCityController.getNearCity)
 .post(verifyJWT, upload.single("image"), nearCityController.addNearCity);
 
 
