@@ -55,17 +55,22 @@ const getPhoto = async (req, res) => {
 
     if (photo) {
       result = [];
-      for (i = 0; i < photo.photos.length; i++) {
-        if (photo.photos[0].picture.url.length != 0) {
-          result.push(photo.photos[0].picture.url[i]);
+      console.log("tcdtrcftrftr", photo.photos.length);
+      for (let i = 0; i < photo.photos.length; i++) {
+        console.log(i, photo.photos.length);
+        let photoList = photo.photos[i].picture.url.length;
+        if (photoList != 0) {
+          result.push(photo.photos[i].picture.url);
+          console.log(photo.photos[i].picture.url);
         }
       }
+     // console.log("hiiii", result);
 
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "Photos fetched",
-        data: result,
+        data: result.flat(),
       });
     }
 

@@ -40,7 +40,8 @@ const PlaceSchema = new mongoose.Schema({
   photos: [
     {
       userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserModel",
       },
 
       picture: {
