@@ -322,7 +322,7 @@ const getParticularReviewPhoto = async (req, res) => {
       { photos: { $elemMatch: { _id: photoId } } },
       { "photos.$": 1 }
     )
-      .select("userId date")
+      .select("userId date placeName")
       .populate("userId", "name profilePic");
     if (!place)
       return res.status(401).json({
