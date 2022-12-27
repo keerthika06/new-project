@@ -57,104 +57,232 @@ const addFavorite = async (req, res) => {
     internalServerError(res, error);
   }
 };
+// const getFavorite = async (req, res) => {
+//   try {
+//     const { userId } = req.users;
+//     const { searchParam } = req.query;
+//     let x = parseFloat(req.query.latitude);
+//     let y = parseFloat(req.query.longitude);
+
+//     if (searchParam == "" || !searchParam) {
+//       const user = await User.find({ _id: userId })
+//         .select("favorite")
+//         .populate(
+//           "favorite.placeId",
+//           "placeName placePic description overallRating stars address "
+//         );
+
+//       // console.log(topPlaces.dist.calculated);
+
+//       if (user)
+//         return res.status(200).json({
+//           status: true,
+//           statusCode: 200,
+//           message: "favorite fetched successfully",
+//           data: obj,
+//         });
+//       else {
+//         return res.status(401).json({
+//           status: false,
+//           statusCode: 401,
+//           message: "no favorite found",
+//         });
+//       }
+//     } else {
+//       const user = await User.findOne({
+//         _id: userId,
+//       }).select("favorite.placeId");
+//       // result of user ------>>>>> favorite: [
+//       //   {
+//       //     placeId: udupi,
+//       //   },
+//       //   {
+//       //     placeId: manglore,
+//       //   },
+//       //   {
+//       //     placeId: kashmir,
+//       //   },
+//       // ];
+//       const favouritePlaceIdsOfThatUser = user.favorite.map((e) => {
+//         return e.placeId;
+//       });
+//       // result of favoritePlaceOfThatUser---->>>>>[
+//       //   udupi,mangalorre,kashmir
+//       // ]
+//       console.log(favouritePlaceIdsOfThatUser);
+
+//       const favouritePlaces = await Place.find({
+//         _id: { $in: favouritePlaceIdsOfThatUser },
+//         $or: [
+//           {
+//             placeName: { $regex: searchParam, $options: "i" },
+//           },
+//           { description: { $regex: searchParam, $options: "i" } },
+//           {
+//             address: { $regex: searchParam, $options: "i" },
+//           },
+//           {
+//             category: { $regex: searchParam, $options: "i" },
+//           },
+//         ],
+//       }).select("placeName placePic description rating stars address");
+
+//       if (user) {
+//         res.status(200).json({
+//           status: true,
+//           statusCode: 200,
+//           message: "searched favorite fetched",
+//           data: favouritePlaces,
+//         });
+//       } else {
+//         return res.status(401).json({
+//           status: false,
+//           statusCode: 401,
+//           message: "no match",
+//         });
+//       }
+//     }
+
+//     // if (user)
+//     //   return res.status(200).json({
+//     //     status: true,
+//     //     statusCode: 200,
+//     //     message: "favorite fetched successfully",
+//     //     data: user,
+//     //   });
+//     // res.status(404).json({
+//     //   status: false,
+//     //   statusCode: 400,
+//     //   message: "Couldn't fetch favorite",
+//     // });
+
+//     //.populate("review.userId", "name profilePic");;
+//   } catch (error) {
+//     console.log("error from getFavorite", error);
+//     internalServerError(res, error);
+//   }
+// };
+
 const getFavorite = async (req, res) => {
   try {
     const { userId } = req.users;
     const { searchParam } = req.query;
-    if (searchParam == "" || !searchParam) {
-      const user = await User.find({ _id: userId })
-        .select("favorite")
-        .populate(
-          "favorite.placeId",
-          "placeName placePic description rating stars address"
-        );
+    let x = parseFloat(req.query.latitude);
+    let y = parseFloat(req.query.longitude);
 
-      if (user)
-        return res.status(200).json({
-          status: true,
-          statusCode: 200,
-          message: "favorite fetched successfully",
-          data: user,
-        });
-      else {
-        return res.status(401).json({
-          status: false,
-          statusCode: 401,
-          message: "no favorite found",
-        });
-      }
-    } else {
-      const user = await User.findOne({
-        _id: userId,
-      }).select("favorite.placeId");
-      // result of user ------>>>>> favorite: [
-      //   {
-      //     placeId: udupi,
-      //   },
-      //   {
-      //     placeId: manglore,
-      //   },
-      //   {
-      //     placeId: kashmir,
-      //   },
-      // ];
-      const favouritePlaceIdsOfThatUser = user.favorite.map((e) => {
+    if (searchParam == "" || !searchParam) {
+      const favorites = await User.findOne({ _id: userId }).select("favorite");
+      const favouritePlaceIdsOfThatUser = favorites.favorite.map((e) => {
         return e.placeId;
       });
-      // result of favoritePlaceOfThatUser---->>>>>[
-      //   udupi,mangalorre,kashmir
-      // ]
-      console.log(favouritePlaceIdsOfThatUser);
 
-      const favouritePlaces = await Place.find({
-        _id: { $in: favouritePlaceIdsOfThatUser },
-        $or: [
-          {
-            placeName: { $regex: searchParam, $options: "i" },
+      const filter = await Place.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [parseFloat(y), parseFloat(x)],
+            },
+            key: "location",
+            maxDistance: parseInt(100000) * 1609,
+            distanceField: "dist.calculated",
+            distanceMultiplier: 1 / 1000,
+            spherical: true,
           },
-          { description: { $regex: searchParam, $options: "i" } },
-          {
-            address: { $regex: searchParam, $options: "i" },
-          },
-          {
-            category: { $regex: searchParam, $options: "i" },
-          },
-        ],
-      }).select("placeName placePic description rating stars address");
+        },
+        {
+          $match: { _id: { $in: favouritePlaceIdsOfThatUser } },
+        },
+        {
+          $project: {
+            _id: 1,
+            "dist.calculated": 1,
 
-      if (user) {
-        res.status(200).json({
-          status: true,
-          statusCode: 200,
-          message: "searched favorite fetched",
-          data: favouritePlaces,
-        });
-      } else {
-        return res.status(401).json({
-          status: false,
-          statusCode: 401,
-          message: "no match",
-        });
-      }
+            placeName: 1,
+            placePic: 1,
+            description: 1,
+            stars: 1,
+            overallRating: 1,
+            address: 1,
+          },
+        },
+      ]);
+      res.send(filter);
+    } else {
+      const favorites = await User.findOne({ _id: userId }).select("favorite");
+
+      const favouritePlaceIdsOfThatUser = favorites.favorite.map((e) => {
+        return e.placeId;
+      });
+
+      const filter = await Place.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [parseFloat(y), parseFloat(x)],
+            },
+            key: "location",
+            maxDistance: parseInt(100000) * 1609,
+            distanceField: "dist.calculated",
+            distanceMultiplier: 1 / 1000,
+            spherical: true,
+          },
+        },
+        {
+          // $match: { _id: "favorites.favorite.$.placeId" }
+
+          $match: { _id: { $in: favouritePlaceIdsOfThatUser } },
+        },
+        {
+          $match: {
+            $or: [
+              {
+                placeName: { $regex: searchParam, $options: "i" },
+              },
+              { description: { $regex: searchParam, $options: "i" } },
+              {
+                address: { $regex: searchParam, $options: "i" },
+              },
+              {
+                category: { $regex: searchParam, $options: "i" },
+              },
+            ],
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            "dist.calculated": 1,
+
+            placeName: 1,
+            placePic: 1,
+            description: 1,
+            stars: 1,
+            overallRating: 1,
+            address: 1,
+          },
+        },
+      ]);
+      res.send(filter);
+
+      // if (user) {
+      //   res.status(200).json({
+      //     status: true,
+      //     statusCode: 200,
+      //     message: "searched favorite fetched",
+      //     data: favouritePlaces,
+      //   });
+      // } else {
+      //   return res.status(401).json({
+      //     status: false,
+      //     statusCode: 401,
+      //     message: "no match",
+      //   });
+      // }
     }
-
-    // if (user)
-    //   return res.status(200).json({
-    //     status: true,
-    //     statusCode: 200,
-    //     message: "favorite fetched successfully",
-    //     data: user,
-    //   });
-    // res.status(404).json({
-    //   status: false,
-    //   statusCode: 400,
-    //   message: "Couldn't fetch favorite",
-    // });
-
-    //.populate("review.userId", "name profilePic");;
   } catch (error) {
-    console.log("error from getFavorite", error);
-    internalServerError(res, error);
+    console.log(error);
   }
 };
 
@@ -245,15 +373,15 @@ const favoriteFilter = async (req, res) => {
     const favorites = await User.findOne({ _id: userId }).select("favorite");
     const favouritePlaceIdsOfThatUser = favorites.favorite.map((e) => {
       return e.placeId;
-    })
-    console.log(
-      "fav",
-      favorites,
-      typeof favorites,
-      "fav",
-      favorites.favorite,
-      typeof favorites.favorite
-    );
+    });
+    // console.log(
+    //   "fav",
+    //   favorites,
+    //   typeof favorites,
+    //   "fav",
+    //   favorites.favorite,
+    //   typeof favorites.favorite
+    // );
     const filter = await Place.aggregate([
       {
         $geoNear: {
@@ -270,9 +398,8 @@ const favoriteFilter = async (req, res) => {
       },
       {
         // $match: { _id: "favorites.favorite.$.placeId" }
-      
-        $match:
-         { _id: { $in: favouritePlaceIdsOfThatUser } },
+
+        $match: { _id: { $in: favouritePlaceIdsOfThatUser } },
       },
       {
         $match: { $and: [{ stars: { $lte: stars } }] },

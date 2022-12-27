@@ -145,7 +145,7 @@ const addReviewByMultipleImages = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("Error, couldn't add ground", error);
+    console.log("Error, couldn't add review", error);
     internalServerError(res, error);
   }
 };
@@ -236,6 +236,10 @@ const getReview = async (req, res) => {
     const review = await Place.findOne({ _id: placeId })
       .select("review.reviewText review.reviewPic review.date")
       .populate("review.userId", "name profilePic.url");
+
+    //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",review.review.date)
+    // let result = review.map(a => a.review.date)
+    // console.log(result)
 
     if (!review)
       return res.status(401).json({
