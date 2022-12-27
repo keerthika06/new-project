@@ -13,26 +13,24 @@ const addFavorite = async (req, res) => {
     const { placeId } = req.body;
 
     const { userId } = req.users;
-  
 
     const ifFavorite = await User.findOne({
       $and: [{ "favorite.placeId": placeId }, { _id: userId }],
     });
-    
+
     const placedetail = await Place.findOne({ placeId }).select(
       "placeName placePic description rating placeLatLong"
     );
 
     if (!ifFavorite) {
-      
       const result = await User.findByIdAndUpdate(
         userId,
 
         { $push: { favorite: { placeId: placeId } } },
 
         { new: true }
-      )
-        
+      );
+
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -54,7 +52,6 @@ const addFavorite = async (req, res) => {
         data: result,
       });
     }
-   
   } catch (error) {
     console.log("Error, couldn't add favorite", error);
     internalServerError(res, error);
@@ -107,6 +104,7 @@ const getFavorite = async (req, res) => {
       // result of favoritePlaceOfThatUser---->>>>>[
       //   udupi,mangalorre,kashmir
       // ]
+      console.log(favouritePlaceIdsOfThatUser);
 
       const favouritePlaces = await Place.find({
         _id: { $in: favouritePlaceIdsOfThatUser },
@@ -159,7 +157,156 @@ const getFavorite = async (req, res) => {
     internalServerError(res, error);
   }
 };
+
+const favoriteFilter = async (req, res) => {
+  try {
+    latitude = req.body.latitude;
+    longitude = req.body.longitude;
+    radius = req.body.radius;
+    stars = req.body.stars;
+    acceptsCreditCard = req.body.acceptsCreditCard;
+    delivery = req.body.delivery;
+    dogFriendly = req.body.dogFriendly;
+    familyFriendly = req.body.familyFriendly;
+    inWalkingDistance = req.body.inWalkingDistance;
+    outdoorSeating = req.body.outdoorSeating;
+    parking = req.body.parking;
+    wifi = req.body.wifi;
+    sortBy = req.body.sortBy;
+    text = req.body.text;
+    const { userId } = req.users;
+
+    if (!radius) radius = 2000;
+    if (!stars) stars = 4;
+    if (sortBy == "distance") sortBy = "distance.calculated";
+    else if (sortBy == "popular") sortBy = "viewCount";
+    else sortBy = "rating";
+    // radius /= 6371;
+
+    const matchlength =
+      acceptsCreditCard ||
+      delivery ||
+      dogFriendly ||
+      familyFriendly ||
+      inWalkingDistance ||
+      outdoorSeating ||
+      parking ||
+      wifi;
+
+    if (matchlength) {
+      match = {
+        $and: [
+          {
+            acceptsCreditCard: acceptsCreditCard,
+          },
+          {
+            delivery: delivery,
+          },
+          {
+            dogFriendly: dogFriendly,
+          },
+          {
+            familyFriendly: familyFriendly,
+          },
+          {
+            inWalkingDistance: inWalkingDistance,
+          },
+          {
+            outdoorSeating: outdoorSeating,
+          },
+          {
+            parking: parking,
+          },
+          {
+            wifi: wifi,
+          },
+        ],
+      };
+
+      match = JSON.parse(JSON.stringify(match));
+      // match["$and"] = match["$and"].filter(
+      //   (value) => Object.keys(value).length !== 0
+      // );
+    } else {
+      match = {
+        $or: [
+          {
+            acceptsCreditCard: true,
+          },
+          {
+            acceptsCreditCard: false,
+          },
+        ],
+      };
+    }
+    // let coords = [];
+    // coords[0] = longitude;
+    // coords[1] = latitude;
+    const favorites = await User.findOne({ _id: userId }).select("favorite");
+    const favouritePlaceIdsOfThatUser = favorites.favorite.map((e) => {
+      return e.placeId;
+    })
+    console.log(
+      "fav",
+      favorites,
+      typeof favorites,
+      "fav",
+      favorites.favorite,
+      typeof favorites.favorite
+    );
+    const filter = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          key: "location",
+          maxDistance: parseInt(100000) * 1609,
+          distanceField: "dist.calculated",
+          distanceMultiplier: 1 / 1000,
+          spherical: true,
+        },
+      },
+      {
+        // $match: { _id: "favorites.favorite.$.placeId" }
+      
+        $match:
+         { _id: { $in: favouritePlaceIdsOfThatUser } },
+      },
+      {
+        $match: { $and: [{ stars: { $lte: stars } }] },
+      },
+      {
+        $match: match,
+      },
+      {
+        $match: {
+          $or: [
+            {
+              placeName: { $regex: req.body.text, $options: "i" },
+            },
+            { description: { $regex: req.body.text, $options: "i" } },
+            {
+              address: { $regex: req.body.text, $options: "i" },
+            },
+            {
+              category: { $regex: req.body.text, $options: "i" },
+            },
+          ],
+        },
+      },
+    ]);
+    console.log(filter);
+
+    res.send(filter);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addFavorite,
   getFavorite,
+  favoriteFilter,
 };

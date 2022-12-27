@@ -26,6 +26,10 @@ router
   .post(checkUserLoggedIn, favoriteController.addFavorite)
   .get(checkUserLoggedIn, favoriteController.getFavorite);
 
+router
+  .route("/favorite-filter")
+  .post(checkUserLoggedIn, favoriteController.favoriteFilter);
+
 module.exports = router;
 
 // https://cricket-iota.vercel.app/api/user
