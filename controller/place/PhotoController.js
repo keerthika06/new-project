@@ -55,7 +55,7 @@ const getPhoto = async (req, res) => {
 
     if (photo) {
       result = [];
-      console.log("tcdtrcftrftr", photo.photos.length);
+     // console.log("tcdtrcftrftr", photo.photos.length);
       for (let i = 0; i < photo.photos.length; i++) {
         console.log(i, photo.photos.length);
         let photoList = photo.photos[i].picture.url.length;
