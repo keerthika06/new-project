@@ -232,7 +232,8 @@ const searchPlace = async (req, res) => {
           category: { $regex: req.query.text, $options: "i" },
         },
       ],
-    }).select("placeName placePic address rating phone");
+    });
+    //.select("placeName placePic address rating phone");
     if (result) {
       res.status(200).json({
         status: true,
