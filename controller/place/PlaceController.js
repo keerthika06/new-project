@@ -158,6 +158,10 @@ const getParticularPlace = async (req, res) => {
 };
 const nearMe = async (req, res) => {
   try {
+    // let page = req.query.page >= 1 ? req.query.page : 1; // for pagination
+    // let queryToBeExecuted = "";
+    // page = page - 1;
+
     let x = parseFloat(req.query.latitude);
     let y = parseFloat(req.query.longitude);
 
@@ -169,7 +173,7 @@ const nearMe = async (req, res) => {
             coordinates: [y, x],
           },
           key: "location",
-          maxDistance: parseInt(100) * 1609,
+          maxDistance: parseInt(10000) * 1609,
           distanceField: "dist.calculated",
           distanceMultiplier: 1 / 1000,
           spherical: true,
@@ -197,8 +201,10 @@ const nearMe = async (req, res) => {
           //rating: 1,
         },
       },
-    ]);
+      // { $skip: constants.RESULTS_PER_PAGE * page },
 
+      // { $limit: constants.RESULTS_PER_PAGE },
+    ]);
     res.status(200).json({
       status: true,
       statusCode: 200,
