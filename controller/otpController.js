@@ -21,7 +21,6 @@ const generateOTP = async (req, res) => {
     } else {
       const secret = process.env.OTP_SECRET_KEY + email;
       const token = totp.generate(secret); // OTP number
-      console.log("token", token);
 
       const subject = "OTP verfication for password";
       const text = `To verify your email address, enter the below code.
