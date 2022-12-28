@@ -122,7 +122,7 @@ const login = async (req, res) => {
             );
             await User.updateOne({ _id: docs._id }, { refreshToken });
             res.header("Refreh-Token", refreshToken);
-            res.header("Authorization", "Bearer  " + accessToken);
+            res.header("Authorization", "Bearer " + accessToken);
             return res.status(200).json({
               status: true,
               statusCode: 200,
