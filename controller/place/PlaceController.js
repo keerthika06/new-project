@@ -219,6 +219,10 @@ const nearMe = async (req, res) => {
 
 const searchPlace = async (req, res) => {
   try {
+
+
+
+    
     const result = await Place.find({
       $or: [
         {

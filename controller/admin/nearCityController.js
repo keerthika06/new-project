@@ -70,6 +70,7 @@ const getNearCity = async (req, res) => {
           _id: 1,
           cityName: 1,
           photos: 1,
+          location: 1,
         },
       },
     ]);
