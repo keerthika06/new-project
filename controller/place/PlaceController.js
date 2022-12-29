@@ -217,26 +217,82 @@ const nearMe = async (req, res) => {
   }
 };
 
+// const searchPlace = async (req, res) => {
+//   try {
+
+//     const result = await Place.find({
+//       $or: [
+//         {
+//           placeName: { $regex: req.query.text, $options: "i" },
+//         },
+//         { description: { $regex: req.query.text, $options: "i" } },
+//         {
+//           address: { $regex: req.query.text, $options: "i" },
+//         },
+//         {
+//           category: { $regex: req.query.text, $options: "i" },
+//         },
+//       ],
+//     });
+//     //.select("placeName placePic address rating phone");
+//     if (result) {
+//       res.status(200).json({
+//         status: true,
+//         statusCode: 200,
+//         message: "Places fetched",
+//         data: result,
+//       });
+//     } else {
+//       return res.status(401).json({
+//         status: false,
+//         statusCode: 401,
+//         message: "no match",
+//       });
+//     }
+//   } catch (error) {
+//     console.log("Error from search place", error);
+//     internalServerError(res, error);
+//   }
+// };
+
 const searchPlace = async (req, res) => {
   try {
+    latitude = req.body.latitude;
+    longitude = req.body.longitude;
+    text = req.body.text;
 
+    const result = await Place.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          key: "location",
+          maxDistance: parseInt(100000) * 1609,
+          distanceField: "dist.calculated",
+          distanceMultiplier: 1 / 1000,
+          spherical: true,
+        },
+      },
+      {
+        $match: {
+          $or: [
+            {
+              placeName: { $regex: req.body.text, $options: "i" },
+            },
+            { description: { $regex: req.body.text, $options: "i" } },
+            {
+              address: { $regex: req.body.text, $options: "i" },
+            },
+            {
+              category: { $regex: req.body.text, $options: "i" },
+            },
+          ],
+        },
+      },
+    ]);
 
-
-    
-    const result = await Place.find({
-      $or: [
-        {
-          placeName: { $regex: req.query.text, $options: "i" },
-        },
-        { description: { $regex: req.query.text, $options: "i" } },
-        {
-          address: { $regex: req.query.text, $options: "i" },
-        },
-        {
-          category: { $regex: req.query.text, $options: "i" },
-        },
-      ],
-    });
     //.select("placeName placePic address rating phone");
     if (result) {
       res.status(200).json({
@@ -257,6 +313,7 @@ const searchPlace = async (req, res) => {
     internalServerError(res, error);
   }
 };
+
 const getPopular = async (req, res) => {
   try {
     let x = parseFloat(req.query.latitude);

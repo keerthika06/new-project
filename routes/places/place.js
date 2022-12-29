@@ -15,7 +15,7 @@ router
   .get(PlaceController.getParticularPlace)
   .put(verifyJWT, upload.single("image"), PlaceController.updatePlace);
 router.route("/near-me").get(PlaceController.nearMe);
-router.route("/search-place").get(PlaceController.searchPlace);
+router.route("/search-place").post(PlaceController.searchPlace);
 router.route("/get-all-places").get(PlaceController.getAllPlace);
 router.route("/get-popular").get(PlaceController.getPopular);
 router.route("/get-top-picks").get(PlaceController.getTopPicks);
