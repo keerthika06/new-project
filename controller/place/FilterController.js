@@ -19,7 +19,6 @@ const findFilter = async (req, res) => {
     wifi = req.body.wifi;
     sortBy = req.body.sortBy;
     text = req.body.text;
-    
 
     if (!radius) radius = 2000;
     if (!stars) stars = 4;
@@ -37,7 +36,7 @@ const findFilter = async (req, res) => {
       outdoorSeating ||
       parking ||
       wifi;
-    
+
     if (matchlength) {
       match = {
         $and: [
@@ -67,12 +66,11 @@ const findFilter = async (req, res) => {
           },
         ],
       };
-    
+
       match = JSON.parse(JSON.stringify(match));
       // match["$and"] = match["$and"].filter(
       //   (value) => Object.keys(value).length !== 0
       // );
-      
     } else {
       match = {
         $or: [
@@ -84,7 +82,6 @@ const findFilter = async (req, res) => {
           },
         ],
       };
-      
     }
     // let coords = [];
     // coords[0] = longitude;
@@ -126,9 +123,7 @@ const findFilter = async (req, res) => {
           ],
         },
       },
-    ]);
-    // .sort(sortBy);
-
+    ]).sort(sortBy);
 
     // Place.find({
     //   loc: {
