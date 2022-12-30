@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String },
-  email: { type: String },
-  phone: { type: String },
-  password: { type: String },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  password: { type: String, required: true },
   profilePic: {
     public_id: {
       type: String,
@@ -21,8 +24,8 @@ const UserSchema = new mongoose.Schema({
   },
   favorite: [
     {
-       placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
-     // placeId: { type: String },
+      placeId: { type: mongoose.Schema.Types.ObjectId, ref: "PlaceModel" },
+      // placeId: { type: String },
       //{ type: Boolean, default: false },
     },
   ],
