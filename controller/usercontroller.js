@@ -151,7 +151,9 @@ const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
     //console.log("zzzzzzzzzzzz", userId);
-    const user = await User.find({ _id: userId }).select("name profilePic");
+    const user = await User.find({ _id: userId }).select(
+      "email name profilePic"
+    );
     if (user)
       return res.status(200).json({
         status: true,
