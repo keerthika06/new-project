@@ -53,24 +53,29 @@ const getPhoto = async (req, res) => {
     const { placeId } = req.query;
     const photo = await Place.findOne({ _id: placeId }).select("photos");
 
+    // console.log("pppp", photo);
+
     if (photo) {
-      result = [];
-     // console.log("tcdtrcftrftr", photo.photos.length);
-      for (let i = 0; i < photo.photos.length; i++) {
-        console.log(i, photo.photos.length);
-        let photoList = photo.photos[i].picture.url.length;
-        if (photoList != 0) {
-          result.push(photo.photos[i].picture.url);
-          console.log(photo.photos[i].picture.url);
-        }
-      }
-     // console.log("hiiii", result);
+      //   result = [];
+      //   // console.log("tcdtrcftrftr", photo.photos.length);
+
+      //   for (let i = 0; i < photo.photos.length; i++) {
+      //     console.log(i, photo.photos.length);
+      //     let photoList = photo.photos[i].picture.url.length;
+      //     if (photoList != 0) {
+      //       result.push(photo.photos[i].picture.url);
+
+      //       console.log(photo.photos[i].picture.url);
+      //     }
+      //   }
+      // console.log("hiiii", result);
 
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "Photos fetched",
-        data: result.flat(),
+        data: photo,
+        // data: result.flat(),
       });
     }
 
