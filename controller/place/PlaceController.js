@@ -183,6 +183,7 @@ const nearMe = async (req, res) => {
         $project: {
           _id: 1,
           "dist.calculated": 1,
+          location:1,
 
           placeName: 1,
           placePic: 1,
