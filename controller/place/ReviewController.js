@@ -235,7 +235,7 @@ const getReview = async (req, res) => {
     const { placeId } = req.query;
     const review = await Place.findOne({ _id: placeId })
       .select("review.reviewText review.reviewPic review.date")
-      .populate("review.userId", "name profilePic.url");
+      .populate("review.userId", "name profilePic");
 
     //console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",review.review.date)
     // let result = review.map(a => a.review.date)
